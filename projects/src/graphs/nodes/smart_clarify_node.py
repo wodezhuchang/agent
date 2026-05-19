@@ -11,17 +11,14 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    SmartClarifyInput,
-    SmartClarifyOutput
-)
+from graphs.state import GlobalState
 
 
 def smart_clarify_node(
-    state: SmartClarifyInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> SmartClarifyOutput:
+) -> dict:
     """
     title: 智能追问
     desc: 分析用户问题的清晰度，当问题模糊时主动追问澄清
@@ -31,12 +28,12 @@ def smart_clarify_node(
     
     # 如果知识库已有高质量结果，不需要追问
     if state.knowledge_has_result and len(state.knowledge_result.strip()) > 50:
-        return SmartClarifyOutput(
-            need_clarify=False,
-            clarify_questions=[],
-            query_clarity="clear",
-            clarified_query=state.user_query
-        )
+        return {
+            "need_clarify": False,
+            "clarify_questions": [],
+            "query_clarity": "clear",
+            "clarified_query": state.user_query
+        }
     
     # 读取配置文件
     cfg_path = config.get("metadata", {}).get("llm_cfg", "")
@@ -95,17 +92,17 @@ def smart_clarify_node(
         
         result_data = json.loads(json_str)
         
-        return SmartClarifyOutput(
-            need_clarify=result_data.get("need_clarify", False),
-            clarify_questions=result_data.get("clarify_questions", []),
-            query_clarity=result_data.get("query_clarity", "clear"),
-            clarified_query=result_data.get("clarified_query", state.user_query)
-        )
+        return {
+            "need_clarify": result_data.get("need_clarify", False),
+            "clarify_questions": result_data.get("clarify_questions", []),
+            "query_clarity": result_data.get("query_clarity", "clear"),
+            "clarified_query": result_data.get("clarified_query", state.user_query)
+        }
     except Exception:
         # 解析失败，默认不需要追问
-        return SmartClarifyOutput(
-            need_clarify=False,
-            clarify_questions=[],
-            query_clarity="clear",
-            clarified_query=state.user_query
-        )
+        return {
+            "need_clarify": False,
+            "clarify_questions": [],
+            "query_clarity": "clear",
+            "clarified_query": state.user_query
+        }

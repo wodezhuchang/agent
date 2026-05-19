@@ -11,17 +11,14 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    ResponseOptimizeInput,
-    ResponseOptimizeOutput
-)
+from graphs.state import GlobalState
 
 
 def response_optimize_node(
-    state: ResponseOptimizeInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> ResponseOptimizeOutput:
+) -> dict:
     """
     title: 校园话术优化
     desc: 优化回复语气和内容，使其贴合校园师生日常交流风格
@@ -32,7 +29,6 @@ def response_optimize_node(
     # 读取配置文件
     cfg_path = config.get("metadata", {}).get("llm_cfg", "")
     if not cfg_path:
-        # 尝试从 configurable 中读取
         cfg_path = config.get("configurable", {}).get("llm_cfg", "config/response_optimize_llm_cfg.json")
     
     full_cfg_path = os.path.join(
@@ -75,6 +71,6 @@ def response_optimize_node(
     # 提取回复内容
     content = response.content if isinstance(response.content, str) else str(response.content)
     
-    return ResponseOptimizeOutput(
-        response_content=content
-    )
+    return {
+        "response_content": content
+    }

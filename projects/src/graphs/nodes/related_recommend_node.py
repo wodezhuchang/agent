@@ -1,6 +1,6 @@
 """
-相关推荐节点
-基于用户问题推荐相关问题和快捷操作
+相关推荐节点（增强版）
+根据用户问题推荐相关问题和快捷操作
 """
 import os
 import json
@@ -11,20 +11,17 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    RelatedRecommendInput,
-    RelatedRecommendOutput
-)
+from graphs.state import GlobalState
 
 
 def related_recommend_node(
-    state: RelatedRecommendInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> RelatedRecommendOutput:
+) -> dict:
     """
     title: 相关推荐
-    desc: 基于用户问题智能推荐相关问题和快捷操作按钮
+    desc: 根据用户当前问题推荐相关问题和快捷操作按钮，提升使用效率
     integrations: 大语言模型
     """
     ctx = runtime.context
@@ -51,7 +48,7 @@ def related_recommend_node(
     user_prompt = up_template.render(
         user_query=state.user_query,
         intent_type=state.intent_type,
-        response_hint=state.response_content[:300] if state.response_content else ""
+        response_hint=state.response_content[:200] if state.response_content else ""
     )
     
     # 初始化LLM客户端
@@ -87,20 +84,13 @@ def related_recommend_node(
         
         result_data = json.loads(json_str)
         
-        return RelatedRecommendOutput(
-            related_questions=result_data.get("related_questions", []),
-            quick_actions=result_data.get("quick_actions", [])
-        )
+        return {
+            "related_questions": result_data.get("related_questions", []),
+            "quick_actions": result_data.get("quick_actions", [])
+        }
     except Exception:
-        # 解析失败，返回默认推荐
-        return RelatedRecommendOutput(
-            related_questions=[
-                "校园卡如何办理？",
-                "图书馆开放时间",
-                "选课流程是什么？"
-            ],
-            quick_actions=[
-                {"name": "教务系统", "action": "jump", "url": "https://jwc.example.edu.cn"},
-                {"name": "图书馆", "action": "jump", "url": "https://library.example.edu.cn"}
-            ]
-        )
+        # 解析失败，返回空推荐
+        return {
+            "related_questions": [],
+            "quick_actions": []
+        }

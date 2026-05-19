@@ -11,17 +11,14 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    ServiceGuideInput,
-    ServiceGuideOutput
-)
+from graphs.state import GlobalState
 
 
 def service_guide_node(
-    state: ServiceGuideInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> ServiceGuideOutput:
+) -> dict:
     """
     title: 办事导航
     desc: 识别办事需求，输出详细的办事步骤、所需材料和注意事项
@@ -128,23 +125,21 @@ def service_guide_node(
         
         response_content = "\n".join(response_parts)
         
-        return ServiceGuideOutput(
-            response_content=response_content,
-            guide_steps=guide_steps,
-            required_materials=required_materials,
-            service_location=service_location,
-            estimated_time=estimated_time,
-            tips=tips
-        )
+        return {
+            "response_content": response_content,
+            "guide_steps": guide_steps,
+            "required_materials": required_materials,
+            "service_location": service_location,
+            "estimated_time": estimated_time,
+            "tips": tips
+        }
     except Exception:
         # 解析失败，返回默认提示
-        return ServiceGuideOutput(
-            response_content="抱歉，暂未找到该办事流程的详细信息，建议您咨询相关部门获取详细指引。",
-            guide_steps=[
-                {"step": 1, "action": "请咨询相关部门获取详细流程"}
-            ],
-            required_materials=["请咨询相关部门确认所需材料"],
-            service_location="请咨询相关部门",
-            estimated_time="未知",
-            tips=["建议提前电话咨询"]
-        )
+        return {
+            "response_content": "抱歉，暂未找到该办事流程的详细信息，建议您咨询相关部门获取详细指引。",
+            "guide_steps": [{"step": 1, "action": "请咨询相关部门获取详细流程"}],
+            "required_materials": ["请咨询相关部门确认所需材料"],
+            "service_location": "请咨询相关部门",
+            "estimated_time": "未知",
+            "tips": ["建议提前电话咨询"]
+        }

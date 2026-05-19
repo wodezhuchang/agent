@@ -9,17 +9,14 @@ from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import KnowledgeClient, Config
 
-from graphs.state import (
-    KnowledgeSearchInput,
-    KnowledgeSearchOutput
-)
+from graphs.state import GlobalState
 
 
 def knowledge_search_node(
-    state: KnowledgeSearchInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> KnowledgeSearchOutput:
+) -> dict:
     """
     title: 知识库检索
     desc: 优先检索校园专属知识库，返回匹配内容和相似度得分
@@ -36,7 +33,7 @@ def knowledge_search_node(
         response = knowledge_client.search(
             query=state.user_query,
             top_k=3,
-            min_score=0.5  # 相似度阈值0.5
+            min_score=0.5
         )
         
         # 检查是否有有效结果
@@ -49,23 +46,23 @@ def knowledge_search_node(
             # 判断是否有有效结果（得分>0.6且内容非空）
             has_result = len(content.strip()) > 0 and score >= 0.6
             
-            return KnowledgeSearchOutput(
-                knowledge_result=content,
-                knowledge_score=score,
-                knowledge_has_result=has_result
-            )
+            return {
+                "knowledge_result": content,
+                "knowledge_score": score,
+                "knowledge_has_result": has_result
+            }
         else:
             # 无结果或检索失败
-            return KnowledgeSearchOutput(
-                knowledge_result="",
-                knowledge_score=0.0,
-                knowledge_has_result=False
-            )
+            return {
+                "knowledge_result": "",
+                "knowledge_score": 0.0,
+                "knowledge_has_result": False
+            }
             
     except Exception as e:
         # 异常处理，返回无结果
-        return KnowledgeSearchOutput(
-            knowledge_result="",
-            knowledge_score=0.0,
-            knowledge_has_result=False
-        )
+        return {
+            "knowledge_result": "",
+            "knowledge_score": 0.0,
+            "knowledge_has_result": False
+        }

@@ -11,17 +11,14 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    IntentRecognitionInput,
-    IntentRecognitionOutput
-)
+from graphs.state import GlobalState
 
 
 def intent_recognition_node(
-    state: IntentRecognitionInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> IntentRecognitionOutput:
+) -> dict:
     """
     title: 意图识别
     desc: 分析用户提问意图，判断是校园咨询、网页跳转、办事导航还是其他需求
@@ -87,19 +84,19 @@ def intent_recognition_node(
         
         result_data = json.loads(json_str)
         
-        return IntentRecognitionOutput(
-            intent_type=result_data.get("intent_type", "campus_consult"),
-            web_jump_url=result_data.get("jump_url", ""),
-            web_jump_name=result_data.get("jump_name", ""),
-            is_service_request=result_data.get("is_service_request", False),
-            service_type=result_data.get("service_type", "")
-        )
+        return {
+            "intent_type": result_data.get("intent_type", "campus_consult"),
+            "web_jump_url": result_data.get("jump_url", ""),
+            "web_jump_name": result_data.get("jump_name", ""),
+            "is_service_request": result_data.get("is_service_request", False),
+            "service_type": result_data.get("service_type", "")
+        }
     except Exception:
         # 解析失败，默认为校园咨询
-        return IntentRecognitionOutput(
-            intent_type="campus_consult",
-            web_jump_url="",
-            web_jump_name="",
-            is_service_request=False,
-            service_type=""
-        )
+        return {
+            "intent_type": "campus_consult",
+            "web_jump_url": "",
+            "web_jump_name": "",
+            "is_service_request": False,
+            "service_type": ""
+        }

@@ -26,7 +26,6 @@ from graphs.nodes.jump_confirm_node import jump_confirm_node
 
 
 # ==================== 条件判断函数 ====================
-# 注意：条件判断函数使用 GlobalState 作为参数类型
 
 def intent_branch(state: GlobalState) -> str:
     """
@@ -76,6 +75,29 @@ def web_search_result_branch(state: GlobalState) -> str:
         return "优化回复"
     else:
         return "无结果提示"
+
+
+# ==================== 输出映射函数 ====================
+
+def get_output(state: GlobalState) -> GraphOutput:
+    """
+    title: 输出映射函数
+    desc: 将全局状态映射到输出schema
+    """
+    return GraphOutput(
+        response_content=state.response_content,
+        need_jump=state.need_jump,
+        jump_url=state.jump_url if state.jump_url else state.web_jump_url,
+        jump_name=state.jump_name if state.jump_name else state.web_jump_name,
+        need_clarify=state.need_clarify,
+        clarify_questions=state.clarify_questions,
+        source_info=state.source_info,
+        confidence_level=state.confidence_level,
+        related_questions=state.related_questions,
+        quick_actions=state.quick_actions,
+        is_service_guide=state.is_service_request,
+        guide_steps=state.guide_steps
+    )
 
 
 # ==================== 主图编排 ====================
@@ -193,12 +215,12 @@ builder.add_conditional_edges(
     source="smart_clarify",
     path=clarify_branch,
     path_map={
-        "需要追问": END,
+        "需要追问": "answer_generation",
         "无需追问": "answer_generation"
     }
 )
 
-# 答案生成 → 后续分支
+# 答案生成 → 判断是否需要联网搜索
 builder.add_conditional_edges(
     source="answer_generation",
     path=knowledge_result_branch,
@@ -232,6 +254,9 @@ builder.add_edge("no_result", END)
 
 # 跳转确认 → 相关推荐
 builder.add_edge("jump_confirm", "related_recommend")
+
+# 设置输出映射（必须在编译之前）
+builder.set_finish(get_output)
 
 # 编译图
 main_graph = builder.compile()

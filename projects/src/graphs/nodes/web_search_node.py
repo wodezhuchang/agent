@@ -8,17 +8,14 @@ from langgraph.runtime import Runtime
 from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import SearchClient
 
-from graphs.state import (
-    WebSearchInput,
-    WebSearchOutput
-)
+from graphs.state import GlobalState
 
 
 def web_search_node(
-    state: WebSearchInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> WebSearchOutput:
+) -> dict:
     """
     title: 联网搜索
     desc: 当知识库无匹配结果时，进行联网实时搜索获取校园相关信息
@@ -31,22 +28,21 @@ def web_search_node(
     
     try:
         # 构建搜索查询，偏向教育类和校园相关信息
-        # 在查询中添加"校园""大学"等关键词以获取更相关的结果
         search_query = f"{state.user_query} 校园 大学"
         
         # 执行搜索，获取带AI摘要的结果
         response = search_client.web_search_with_summary(
             query=search_query,
-            count=5  # 获取前5条结果
+            count=5
         )
         
         # 提取搜索结果
         if response and response.summary:
-            return WebSearchOutput(
-                web_search_result=response.summary,
-                source_content=response.summary,
-                source_type="web_search"
-            )
+            return {
+                "web_search_result": response.summary,
+                "source_content": response.summary,
+                "source_type": "web_search"
+            }
         elif response and response.web_items:
             # 如果没有摘要，拼接搜索结果片段
             snippets = []
@@ -56,23 +52,23 @@ def web_search_node(
             
             if snippets:
                 result_text = "\n".join(snippets)
-                return WebSearchOutput(
-                    web_search_result=result_text,
-                    source_content=result_text,
-                    source_type="web_search"
-                )
+                return {
+                    "web_search_result": result_text,
+                    "source_content": result_text,
+                    "source_type": "web_search"
+                }
         
         # 无搜索结果
-        return WebSearchOutput(
-            web_search_result="",
-            source_content="",
-            source_type="web_search"
-        )
+        return {
+            "web_search_result": "",
+            "source_content": "",
+            "source_type": "web_search"
+        }
         
     except Exception as e:
         # 搜索失败，返回空结果
-        return WebSearchOutput(
-            web_search_result="",
-            source_content="",
-            source_type="web_search"
-        )
+        return {
+            "web_search_result": "",
+            "source_content": "",
+            "source_type": "web_search"
+        }

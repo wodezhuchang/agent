@@ -11,17 +11,14 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    AnswerGenerationInput,
-    AnswerGenerationOutput
-)
+from graphs.state import GlobalState
 
 
 def answer_generation_node(
-    state: AnswerGenerationInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> AnswerGenerationOutput:
+) -> dict:
     """
     title: 答案生成
     desc: 基于知识库内容生成答案，并标注信息来源和可信度
@@ -93,8 +90,8 @@ def answer_generation_node(
         }
         confidence = "medium"
     
-    return AnswerGenerationOutput(
-        response_content=content,
-        source_info=source_info,
-        confidence_level=confidence
-    )
+    return {
+        "response_content": content,
+        "source_info": source_info,
+        "confidence_level": confidence
+    }

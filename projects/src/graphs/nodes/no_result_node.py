@@ -11,17 +11,14 @@ from coze_coding_utils.runtime_ctx.context import Context
 from coze_coding_dev_sdk import LLMClient
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from graphs.state import (
-    NoResultInput,
-    NoResultOutput
-)
+from graphs.state import GlobalState
 
 
 def no_result_node(
-    state: NoResultInput,
+    state: GlobalState,
     config: RunnableConfig,
     runtime: Runtime[Context]
-) -> NoResultOutput:
+) -> dict:
     """
     title: 无结果友好回复
     desc: 当知识库和联网搜索都无答案时，生成标准校园友好提示
@@ -32,7 +29,6 @@ def no_result_node(
     # 读取配置文件
     cfg_path = config.get("metadata", {}).get("llm_cfg", "")
     if not cfg_path:
-        # 尝试从 configurable 中读取
         cfg_path = config.get("configurable", {}).get("llm_cfg", "config/no_result_llm_cfg.json")
     
     full_cfg_path = os.path.join(
@@ -73,6 +69,6 @@ def no_result_node(
     # 提取回复内容
     content = response.content if isinstance(response.content, str) else str(response.content)
     
-    return NoResultOutput(
-        response_content=content
-    )
+    return {
+        "response_content": content
+    }
