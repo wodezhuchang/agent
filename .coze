@@ -5,5 +5,13 @@ project_type = ""
 [preview]
 preview_enable = "disabled"
 
+[deploy.profile]
+kind = "service"
+flavor = "agent"
+
+[deploy]
+build = ["bash", "projects/scripts/coze-deploy-build.sh"]
+run = ["bash", "projects/scripts/coze-deploy-run.sh"]
+
 [subprojects]
 path = ["projects"]
