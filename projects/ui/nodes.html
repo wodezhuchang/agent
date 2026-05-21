@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园校小助 - 节点列表</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    .nodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .node-card {
+      cursor: pointer;
+    }
+    
+    .node-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-xs);
+      margin-top: var(--spacing-md);
+    }
+    
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+    
+    .tag--task {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+    
+    .tag--agent {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    
+    .tag--input {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+    
+    .tag--output {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    
+    .node-card__actions {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-md);
+      padding-top: var(--spacing-md);
+      border-top: 1px solid var(--border-light);
+    }
+    
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: var(--spacing-lg);
+    }
+    
+    .modal--fadeout {
+      animation: fadeOut 0.3s ease-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+    }
+    
+    .modal__content {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: modalIn 0.3s ease-out;
+    }
+    
+    .modal--lg {
+      max-width: 800px;
+    }
+    
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .modal__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: var(--spacing-xl);
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .modal__close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-tertiary);
+      padding: var(--spacing-xs);
+      line-height: 1;
+    }
+    
+    .modal__close:hover {
+      color: var(--text-primary);
+    }
+    
+    .modal__body {
+      padding: var(--spacing-xl);
+    }
+    
+    .modal__footer {
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-tertiary);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--spacing-md);
+    }
+    
+    .detail-section {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .detail-section h4 {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__logo">
+      <div class="header__logo-icon">🏫</div>
+      <span>校园校小助</span>
+    </div>
+    <nav class="header__nav">
+      <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
+        🔗 Coze 平台
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul class="sidebar__menu">
+        <li class="sidebar__item">
+          <a href="index.html" class="sidebar__link" data-page="index">
+            <span>📊</span>
+            <span>工作流概览</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="nodes.html" class="sidebar__link sidebar__link--active" data-page="nodes">
+            <span>🔧</span>
+            <span>节点列表</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="config.html" class="sidebar__link" data-page="config">
+            <span>⚙️</span>
+            <span>模块配置</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="links.html" class="sidebar__link" data-page="links">
+            <span>🔗</span>
+            <span>Coze 链接</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="test.html" class="sidebar__link" data-page="test">
+            <span>🧪</span>
+            <span>工作流测试</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-header__title">节点列表</h1>
+        <p class="page-header__subtitle">工作流包含 10 个功能节点，包括任务节点和 AI 代理节点</p>
+      </div>
+
+      <!-- Node Cards Grid -->
+      <div id="nodes-container" class="nodes-grid">
+        <!-- Nodes will be rendered by JavaScript -->
+        <div style="text-align: center; padding: 60px 0; color: var(--text-secondary);">
+          <p>正在加载节点列表...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/workflow-data.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    // 渲染节点列表
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNodes();
+    });
+    
+    function renderNodes() {
+      const container = document.getElementById('nodes-container');
+      if (!container) return;
+      
+      let html = '';
+      
+      WORKFLOW_DATA.nodes.forEach((node, index) => {
+        const typeClass = node.type === 'agent' ? 'tag--agent' : 'tag--task';
+        
+        html += `
+          <div class="node-card card animate-fadeIn" style="animation-delay: ${index * 0.1}s;" data-node="${node.id}" onclick="showNodeDetail('${node.id}')">
+            <div class="node-card__header">
+              <div class="node-card__icon node-card__icon--${node.type}">
+                ${node.icon}
+              </div>
+              <div>
+                <div class="node-card__id">${node.id}</div>
+                <div class="node-card__name">${node.name}</div>
+              </div>
+              <span class="tag ${typeClass}">${node.type}</span>
+            </div>
+            
+            <p class="node-card__description">${node.description}</p>
+            
+            <div class="node-card__tags">
+              <span class="tag tag--input" title="输入字段">📥 ${node.inputs.length} 输入</span>
+              <span class="tag tag--output" title="输出字段">📤 ${node.outputs.length} 输出</span>
+            </div>
+            
+            <div class="node-card__actions">
+              <button class="btn btn--secondary btn--sm">查看详情</button>
+              <button class="btn btn--ghost btn--sm">查看代码</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+    
+    // 显示节点详情
+    window.showNodeDetail = function(nodeId) {
+      const node = WORKFLOW_DATA.nodes.find(n => n.id === nodeId);
+      if (!node) return;
+      
+      // 移除已存在的模态框
+      const existingModal = document.querySelector('.modal');
+      if (existingModal) existingModal.remove();
+      
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.onclick = function(e) {
+        if (e.target === this) this.remove();
+      };
+      
+      modal.innerHTML = `
+        <div class="modal__content modal--lg">
+          <div class="modal__header">
+            <div class="flex items-center gap-md">
+              <div style="font-size: 2.5rem;">${node.icon}</div>
+              <div>
+                <h2 style="font-size: 1.5rem; margin-bottom: 4px;">${node.name}</h2>
+                <code style="font-size: 0.875rem; color: var(--text-secondary);">${node.id}</code>
+              </div>
+            </div>
+            <button class="modal__close" onclick="this.closest('.modal').remove()">&times;</button>
+          </div>
+          
+          <div class="modal__body">
+            <p style="font-size: 1rem; line-height: 1.7; margin-bottom: var(--spacing-xl);">${node.description}</p>
+            
+            <div class="detail-grid">
+              <div class="detail-section">
+                <h4>节点类型</h4>
+                <span class="tag tag--${node.type}" style="font-size: 0.875rem; padding: 6px 12px;">${node.type.toUpperCase()}</span>
+              </div>
+              
+              <div class="detail-section">
+                <h4>源代码文件</h4>
+                <code style="font-size: 0.875rem;">${node.file}</code>
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <h4>输入字段 (${node.inputs.length})</h4>
+              <div class="flex flex-wrap gap-sm" style="margin-top: var(--spacing-sm);">
+                ${node.inputs.map(inp => `<span class="tag tag--input" style="font-size: 0.875rem;">${inp}</span>`).join('')}
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <h4>输出字段 (${node.outputs.length})</h4>
+              <div class="flex flex-wrap gap-sm" style="margin-top: var(--spacing-sm);">
+                ${node.outputs.map(out => `<span class="tag tag--output" style="font-size: 0.875rem;">${out}</span>`).join('')}
+              </div>
+            </div>
+            
+            ${node.config ? `
+              <div class="detail-section">
+                <h4>配置文件</h4>
+                <code style="font-size: 0.875rem; display: block; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">${node.config}</code>
+              </div>
+            ` : ''}
+            
+            <div class="detail-section">
+              <h4>集成技能</h4>
+              <div class="flex flex-wrap gap-sm" style="margin-top: var(--spacing-sm);">
+                ${node.integrations.length > 0 
+                  ? node.integrations.map(int => `<span class="tag" style="font-size: 0.875rem;">${int}</span>`).join('')
+                  : '<span class="text-muted text-sm">无</span>'
+                }
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal__footer">
+            <button class="btn btn--secondary" onclick="this.closest('.modal').remove()">关闭</button>
+            <button class="btn btn--primary">查看源代码</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+    };
+  </script>
+</body>
+</html>

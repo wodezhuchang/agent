@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园校小助 - 模块配置</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    .config-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-xl);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: var(--spacing-md);
+    }
+    
+    .tab-btn {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      background: transparent;
+      border: none;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all var(--transition);
+    }
+    
+    .tab-btn:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+    
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .config-section {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
+      box-shadow: var(--shadow);
+    }
+    
+    .config-section__title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-md);
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .toggle-group__label {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .toggle-group__desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      margin-top: var(--spacing-xs);
+    }
+    
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 24px;
+      background: var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    
+    .toggle.active {
+      background: var(--primary);
+    }
+    
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .toggle.active::after {
+      left: 26px;
+    }
+    
+    .notification {
+      position: fixed;
+      top: var(--spacing-xl);
+      right: var(--spacing-xl);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 3000;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    .notification--success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .notification--error {
+      background: var(--error);
+      color: white;
+    }
+    
+    .notification--fadeout {
+      animation: fadeOut 0.3s ease-out forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__logo">
+      <div class="header__logo-icon">🏫</div>
+      <span>校园校小助</span>
+    </div>
+    <nav class="header__nav">
+      <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
+        🔗 Coze 平台
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul class="sidebar__menu">
+        <li class="sidebar__item">
+          <a href="index.html" class="sidebar__link" data-page="index">
+            <span>📊</span>
+            <span>工作流概览</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="nodes.html" class="sidebar__link" data-page="nodes">
+            <span>🔧</span>
+            <span>节点列表</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="config.html" class="sidebar__link sidebar__link--active" data-page="config">
+            <span>⚙️</span>
+            <span>模块配置</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="links.html" class="sidebar__link" data-page="links">
+            <span>🔗</span>
+            <span>Coze 链接</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="test.html" class="sidebar__link" data-page="test">
+            <span>🧪</span>
+            <span>工作流测试</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-header__title">模块配置</h1>
+        <p class="page-header__subtitle">配置工作流的参数和功能开关</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="config-tabs">
+        <button class="tab-btn active" data-tab="llm">LLM 配置</button>
+        <button class="tab-btn" data-tab="knowledge">知识库</button>
+        <button class="tab-btn" data-tab="features">功能开关</button>
+      </div>
+
+      <!-- LLM Config -->
+      <div id="tab-llm" class="tab-content active">
+        <div class="config-section animate-fadeIn">
+          <h3 class="config-section__title">🧠 大语言模型配置</h3>
+          <form id="llm-config-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">模型名称</label>
+                <input type="text" 
+                       class="form-input" 
+                       name="model" 
+                       value="doubao-seed-2-0-lite-260215"
+                       placeholder="输入模型名称">
+                <div class="form-help">Coze 平台支持的模型名称</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Temperature</label>
+                <input type="number" 
+                       class="form-input" 
+                       name="temperature" 
+                       value="0.3"
+                       min="0"
+                       max="2"
+                       step="0.1">
+                <div class="form-help">控制输出的随机性 (0-2)</div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Max Tokens</label>
+                <input type="number" 
+                       class="form-input" 
+                       name="max_tokens"
+                       value="2000"
+                       min="100"
+                       max="8000">
+                <div class="form-help">单次回复的最大令牌数</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">系统提示词</label>
+                <input type="text" 
+                       class="form-input" 
+                       name="system_prompt"
+                       value="你是一个校园智能助手..."
+                       placeholder="输入系统提示词">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <button type="submit" class="btn btn--primary">💾 保存配置</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Knowledge Config -->
+      <div id="tab-knowledge" class="tab-content">
+        <div class="config-section animate-fadeIn">
+          <h3 class="config-section__title">📚 知识库配置</h3>
+          <form id="knowledge-config-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Top K</label>
+                <input type="number" 
+                       class="form-input" 
+                       name="top_k"
+                       value="3"
+                       min="1"
+                       max="10">
+                <div class="form-help">返回的最相关结果数量</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">最小相似度分数</label>
+                <input type="number" 
+                       class="form-input" 
+                       name="min_score"
+                       value="0.5"
+                       min="0"
+                       max="1"
+                       step="0.1">
+                <div class="form-help">低于此分数的结果将被过滤</div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">知识库 ID</label>
+              <input type="text" 
+                     class="form-input" 
+                     name="knowledge_base_id"
+                     placeholder="输入知识库 ID">
+              <div class="form-help">在 Coze 平台获取的知识库标识符</div>
+            </div>
+            
+            <div class="form-group">
+              <button type="submit" class="btn btn--primary">💾 保存配置</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Features Config -->
+      <div id="tab-features" class="tab-content">
+        <div class="config-section animate-fadeIn">
+          <h3 class="config-section__title">⚡ 功能开关</h3>
+          <form id="features-config-form">
+            <div class="toggle-group">
+              <div>
+                <div class="toggle-group__label">知识库优先模式</div>
+                <div class="toggle-group__desc">始终优先检索知识库，无结果再联网搜索</div>
+              </div>
+              <div class="toggle active" data-toggle="knowledge_first" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="toggle-group">
+              <div>
+                <div class="toggle-group__label">联网搜索</div>
+                <div class="toggle-group__desc">知识库无结果时启用联网搜索兜底</div>
+              </div>
+              <div class="toggle active" data-toggle="web_search_enabled" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="toggle-group">
+              <div>
+                <div class="toggle-group__label">网页跳转</div>
+                <div class="toggle-group__desc">识别用户跳转意图并提供跳转确认</div>
+              </div>
+              <div class="toggle active" data-toggle="jump_enabled" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="toggle-group">
+              <div>
+                <div class="toggle-group__label">智能追问</div>
+                <div class="toggle-group__desc">问题模糊时主动追问澄清</div>
+              </div>
+              <div class="toggle active" data-toggle="clarify_enabled" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="toggle-group">
+              <div>
+                <div class="toggle-group__label">相关推荐</div>
+                <div class="toggle-group__desc">回答后推荐相关问题和快捷操作</div>
+              </div>
+              <div class="toggle active" data-toggle="recommend_enabled" onclick="toggleSwitch(this)"></div>
+            </div>
+            
+            <div class="form-group" style="margin-top: var(--spacing-xl);">
+              <button type="submit" class="btn btn--primary">💾 保存配置</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/workflow-data.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    // Tab 切换
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tabId = this.getAttribute('data-tab');
+        
+        // 切换按钮状态
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        // 切换内容
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+      });
+    });
+    
+    // Toggle Switch
+    window.toggleSwitch = function(element) {
+      element.classList.toggle('active');
+    };
+    
+    // 表单提交
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 获取表单数据
+        const formData = new FormData(this);
+        const config = Object.fromEntries(formData.entries());
+        
+        // 获取开关状态
+        document.querySelectorAll('.toggle').forEach(toggle => {
+          const key = toggle.getAttribute('data-toggle');
+          if (key) {
+            config[key] = toggle.classList.contains('active');
+          }
+        });
+        
+        // 保存到 localStorage
+        localStorage.setItem('workflow_config', JSON.stringify(config));
+        
+        // 显示通知
+        showNotification('配置已保存', 'success');
+      });
+    });
+    
+    // 显示通知
+    function showNotification(message, type = 'info') {
+      // 移除已存在的通知
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
+      
+      const notification = document.createElement('div');
+      notification.className = `notification notification--${type}`;
+      notification.innerHTML = `
+        <span>✅ ${message}</span>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // 自动消失
+      setTimeout(() => {
+        notification.classList.add('notification--fadeout');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+    
+    // 加载保存的配置
+    function loadSavedConfig() {
+      const saved = localStorage.getItem('workflow_config');
+      if (!saved) return;
+      
+      try {
+        const config = JSON.parse(saved);
+        
+        // 填充表单
+        Object.keys(config).forEach(key => {
+          const input = document.querySelector(`[name="${key}"]`);
+          if (input) {
+            input.value = config[key];
+          }
+          
+          // 恢复开关状态
+          const toggle = document.querySelector(`[data-toggle="${key}"]`);
+          if (toggle && typeof config[key] === 'boolean') {
+            toggle.classList.toggle('active', config[key]);
+          }
+        });
+      } catch (error) {
+        console.error('Failed to load config:', error);
+      }
+    }
+    
+    // 页面加载时恢复配置
+    document.addEventListener('DOMContentLoaded', loadSavedConfig);
+  </script>
+</body>
+</html>

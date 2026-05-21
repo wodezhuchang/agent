@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园校小助 - 工作流概览</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* Page-specific styles */
+    .flowchart-container {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+      box-shadow: var(--shadow);
+      min-height: 500px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .stat-card {
+      text-align: center;
+      padding: var(--spacing-xl);
+    }
+    
+    .stat-card__value {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .stat-card__label {
+      font-size: var(--text-sm);
+      opacity: 0.9;
+      font-weight: 500;
+    }
+    
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .quick-card {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-lg);
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    
+    .quick-card:hover {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+      transform: translateY(-2px);
+    }
+    
+    .quick-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--primary-bg);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+      flex-shrink: 0;
+    }
+    
+    .quick-card__title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .quick-card__desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+    }
+    
+    .section-title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      margin-bottom: var(--spacing-lg);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__logo">
+      <div class="header__logo-icon">🏫</div>
+      <span>校园校小助</span>
+    </div>
+    <nav class="header__nav">
+      <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
+        🔗 Coze 平台
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul class="sidebar__menu">
+        <li class="sidebar__item">
+          <a href="index.html" class="sidebar__link sidebar__link--active" data-page="index">
+            <span>📊</span>
+            <span>工作流概览</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="nodes.html" class="sidebar__link" data-page="nodes">
+            <span>🔧</span>
+            <span>节点列表</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="config.html" class="sidebar__link" data-page="config">
+            <span>⚙️</span>
+            <span>模块配置</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="links.html" class="sidebar__link" data-page="links">
+            <span>🔗</span>
+            <span>Coze 链接</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="test.html" class="sidebar__link" data-page="test">
+            <span>🧪</span>
+            <span>工作流测试</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="sidebar__section">帮助</div>
+      <ul class="sidebar__menu">
+        <li class="sidebar__item">
+          <a href="../README.md" class="sidebar__link" target="_blank">
+            <span>📖</span>
+            <span>使用文档</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="../AGENTS.md" class="sidebar__link" target="_blank">
+            <span>📋</span>
+            <span>项目说明</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-header__title">工作流概览</h1>
+        <p class="page-header__subtitle">校园校小助智能问答工作流可视化展示</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid animate-fadeIn">
+        <div class="stat-card">
+          <div class="stat-card__value">10</div>
+          <div class="stat-card__label">功能节点</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+          <div class="stat-card__value">15</div>
+          <div class="stat-card__label">连接路径</div>
+        </div>
+        <div class="stat-card" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+          <div class="stat-card__value">4</div>
+          <div class="stat-card__label">分支条件</div>
+        </div>
+      </div>
+
+      <!-- Flowchart -->
+      <h2 class="section-title">工作流流程图</h2>
+      <div id="flowchart-container" class="flowchart-container animate-fadeIn stagger-1">
+        <div style="text-align: center; padding: 100px 0; color: var(--text-secondary);">
+          <p>正在加载流程图...</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <h2 class="section-title">快捷操作</h2>
+      <div class="quick-actions animate-fadeIn stagger-2">
+        <a href="nodes.html" class="quick-card">
+          <div class="quick-card__icon">🔧</div>
+          <div>
+            <div class="quick-card__title">查看所有节点</div>
+            <div class="quick-card__desc">了解每个节点的功能和配置</div>
+          </div>
+        </a>
+        
+        <a href="config.html" class="quick-card">
+          <div class="quick-card__icon">⚙️</div>
+          <div>
+            <div class="quick-card__title">模块配置</div>
+            <div class="quick-card__desc">配置 LLM 模型和功能开关</div>
+          </div>
+        </a>
+        
+        <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="quick-card">
+          <div class="quick-card__icon">🚀</div>
+          <div>
+            <div class="quick-card__title">Coze IDE</div>
+            <div class="quick-card__desc">在 Coze 平台打开工作流编辑器</div>
+          </div>
+        </a>
+        
+        <a href="test.html" class="quick-card">
+          <div class="quick-card__icon">🧪</div>
+          <div>
+            <div class="quick-card__title">测试工作流</div>
+            <div class="quick-card__desc">输入问题测试工作流响应</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Legend -->
+      <div class="card mt-xl animate-fadeIn stagger-3">
+        <div class="card__body">
+          <h3 class="mb-md">图例说明</h3>
+          <div class="flex flex-wrap gap-lg">
+            <div class="flex items-center gap-sm">
+              <div style="width: 12px; height: 12px; border-radius: 4px; background: #2563EB;"></div>
+              <span class="text-sm">Task 节点（任务）</span>
+            </div>
+            <div class="flex items-center gap-sm">
+              <div style="width: 12px; height: 12px; border-radius: 4px; background: #10B981;"></div>
+              <span class="text-sm">Agent 节点（AI 代理）</span>
+            </div>
+            <div class="flex items-center gap-sm">
+              <div style="width: 12px; height: 2px; background: #94A8B8;"></div>
+              <span class="text-sm">普通连接</span>
+            </div>
+            <div class="flex items-center gap-sm">
+              <div style="width: 12px; height: 2px; background: #94A8B8; border-style: dashed;"></div>
+              <span class="text-sm">条件分支</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/workflow-data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

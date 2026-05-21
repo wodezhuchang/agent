@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园校小助 - Coze 链接</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+    }
+    
+    .link-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+      padding: var(--spacing-xl);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .link-card:hover {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .link-card__icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      background: var(--primary-bg);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+    }
+    
+    .link-card__content {
+      flex: 1;
+    }
+    
+    .link-card__title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .link-card__desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .link-card__url {
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+    }
+    
+    .info-section {
+      background: var(--info-bg);
+      border: 1px solid var(--info);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .info-section h3 {
+      color: var(--info);
+      font-size: var(--text-lg);
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .info-section p {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__logo">
+      <div class="header__logo-icon">🏫</div>
+      <span>校园校小助</span>
+    </div>
+    <nav class="header__nav">
+      <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
+        🔗 Coze 平台
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul class="sidebar__menu">
+        <li class="sidebar__item">
+          <a href="index.html" class="sidebar__link" data-page="index">
+            <span>📊</span>
+            <span>工作流概览</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="nodes.html" class="sidebar__link" data-page="nodes">
+            <span>🔧</span>
+            <span>节点列表</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="config.html" class="sidebar__link" data-page="config">
+            <span>⚙️</span>
+            <span>模块配置</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="links.html" class="sidebar__link sidebar__link--active" data-page="links">
+            <span>🔗</span>
+            <span>Coze 链接</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="test.html" class="sidebar__link" data-page="test">
+            <span>🧪</span>
+            <span>工作流测试</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-header__title">Coze 平台链接</h1>
+        <p class="page-header__subtitle">快速访问 Coze 平台相关功能页面</p>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section animate-fadeIn">
+        <h3>💡 使用说明</h3>
+        <p>这些链接将帮助您快速访问 Coze 平台的不同功能区域。您可以直接点击卡片跳转到相应的页面进行操作。请确保您已经登录 Coze 平台。</p>
+      </div>
+
+      <!-- Links Grid -->
+      <div id="links-container" class="links-grid">
+        <!-- Links will be rendered by JavaScript -->
+        <div style="text-align: center; padding: 60px 0; color: var(--text-secondary);">
+          <p>正在加载链接列表...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/workflow-data.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    // 渲染链接列表
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLinks();
+    });
+    
+    function renderLinks() {
+      const container = document.getElementById('links-container');
+      if (!container) return;
+      
+      let html = '';
+      
+      WORKFLOW_DATA.cozeLinks.forEach((link, index) => {
+        html += `
+          <a href="${link.url}" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="link-card animate-fadeIn" 
+             style="animation-delay: ${index * 0.1}s;">
+            <div class="link-card__icon">
+              ${link.icon}
+            </div>
+            <div class="link-card__content">
+              <div class="link-card__title">${link.title}</div>
+              <div class="link-card__desc">${link.description}</div>
+              <div class="link-card__url">${link.url}</div>
+            </div>
+          </a>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

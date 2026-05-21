@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园校小助 - 工作流测试</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    .test-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      min-height: 600px;
+    }
+    
+    @media (max-width: 1024px) {
+      .test-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .test-panel {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .test-panel__header {
+      padding: var(--spacing-lg);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-tertiary);
+    }
+    
+    .test-panel__title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .test-panel__body {
+      flex: 1;
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .input-section {
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .input-section label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .input-section textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: var(--spacing-md);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: var(--text-base);
+      resize: vertical;
+      transition: all var(--transition);
+    }
+    
+    .input-section textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .role-selector {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .role-option {
+      flex: 1;
+      padding: var(--spacing-md);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    
+    .role-option:hover {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+    }
+    
+    .role-option.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+    }
+    
+    .role-option__icon {
+      font-size: 1.5rem;
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .role-option__label {
+      font-weight: 500;
+    }
+    
+    .preset-questions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .preset-btn {
+      padding: var(--spacing-xs) var(--spacing-md);
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    
+    .preset-btn:hover {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .response-area {
+      flex: 1;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    
+    .response-placeholder {
+      color: var(--text-tertiary);
+      text-align: center;
+      padding: var(--spacing-xl);
+    }
+    
+    .log-section {
+      margin-top: var(--spacing-lg);
+      padding: var(--spacing-lg);
+      background: #1E293B;
+      border-radius: var(--radius-md);
+      color: #E2E8F0;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .log-entry {
+      padding: var(--spacing-xs) 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    
+    .log-entry__time {
+      color: #64748B;
+      margin-right: var(--spacing-sm);
+    }
+    
+    .log-entry__node {
+      color: #10B981;
+      margin-right: var(--spacing-sm);
+    }
+    
+    .test-loading {
+      display: none;
+      text-align: center;
+      padding: var(--spacing-xl);
+    }
+    
+    .test-loading.active {
+      display: block;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto var(--spacing-md);
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__logo">
+      <div class="header__logo-icon">🏫</div>
+      <span>校园校小助</span>
+    </div>
+    <nav class="header__nav">
+      <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
+        🔗 Coze 平台
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav>
+      <ul class="sidebar__menu">
+        <li class="sidebar__item">
+          <a href="index.html" class="sidebar__link" data-page="index">
+            <span>📊</span>
+            <span>工作流概览</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="nodes.html" class="sidebar__link" data-page="nodes">
+            <span>🔧</span>
+            <span>节点列表</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="config.html" class="sidebar__link" data-page="config">
+            <span>⚙️</span>
+            <span>模块配置</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="links.html" class="sidebar__link" data-page="links">
+            <span>🔗</span>
+            <span>Coze 链接</span>
+          </a>
+        </li>
+        <li class="sidebar__item">
+          <a href="test.html" class="sidebar__link sidebar__link--active" data-page="test">
+            <span>🧪</span>
+            <span>工作流测试</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-header__title">工作流测试</h1>
+        <p class="page-header__subtitle">输入测试问题，查看工作流的响应和执行流程</p>
+      </div>
+
+      <!-- Test Container -->
+      <div class="test-container">
+        <!-- Input Panel -->
+        <div class="test-panel animate-fadeIn">
+          <div class="test-panel__header">
+            <h3 class="test-panel__title">📝 输入</h3>
+          </div>
+          <div class="test-panel__body">
+            <div class="input-section">
+              <label>用户角色</label>
+              <div class="role-selector">
+                <div class="role-option active" data-role="student" onclick="selectRole(this)">
+                  <div class="role-option__icon">👨‍🎓</div>
+                  <div class="role-option__label">学生</div>
+                </div>
+                <div class="role-option" data-role="teacher" onclick="selectRole(this)">
+                  <div class="role-option__icon">👨‍🏫</div>
+                  <div class="role-option__label">教师</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="input-section">
+              <label>预设问题</label>
+              <div class="preset-questions">
+                <button class="preset-btn" onclick="setQuestion('图书馆开放时间是什么时候？')">图书馆开放时间</button>
+                <button class="preset-btn" onclick="setQuestion('我想打开教务系统')">打开教务系统</button>
+                <button class="preset-btn" onclick="setQuestion('我想办理学生证补办')">学生证补办</button>
+                <button class="preset-btn" onclick="setQuestion('考试')">考试（简短问题）</button>
+                <button class="preset-btn" onclick="setQuestion('今天天气怎么样？')">其他问题</button>
+              </div>
+            </div>
+            
+            <div class="input-section">
+              <label for="test-question">输入您的问题</label>
+              <textarea id="test-question" 
+                        placeholder="请输入您想测试的问题..."></textarea>
+            </div>
+            
+            <button class="btn btn--primary btn--lg btn--block" onclick="runTest()">
+              🚀 运行测试
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="test-panel animate-fadeIn" style="animation-delay: 0.1s;">
+          <div class="test-panel__header">
+            <h3 class="test-panel__title">📊 执行结果</h3>
+          </div>
+          <div class="test-panel__body">
+            <div id="response-area" class="response-area">
+              <div class="response-placeholder">
+                <p>🤖 尚未执行测试</p>
+                <p class="text-sm mt-sm">请在左侧输入问题并点击"运行测试"</p>
+              </div>
+            </div>
+            
+            <div id="test-loading" class="test-loading">
+              <div class="spinner"></div>
+              <p>正在执行工作流...</p>
+            </div>
+            
+            <div id="log-section" class="log-section" style="display: none;">
+              <div style="color: #94A3B8; margin-bottom: var(--spacing-sm); font-weight: 600;">执行日志</div>
+              <div id="log-entries"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/workflow-data.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    let currentRole = 'student';
+    
+    // 选择角色
+    window.selectRole = function(element) {
+      document.querySelectorAll('.role-option').forEach(opt => {
+        opt.classList.remove('active');
+      });
+      element.classList.add('active');
+      currentRole = element.getAttribute('data-role');
+    };
+    
+    // 设置问题
+    window.setQuestion = function(question) {
+      document.getElementById('test-question').value = question;
+    };
+    
+    // 运行测试
+    window.runTest = async function() {
+      const question = document.getElementById('test-question').value.trim();
+      
+      if (!question) {
+        alert('请输入测试问题');
+        return;
+      }
+      
+      // 显示加载状态
+      document.getElementById('test-loading').classList.add('active');
+      document.getElementById('response-area').style.display = 'none';
+      document.getElementById('log-section').style.display = 'block';
+      
+      // 清空日志
+      const logEntries = document.getElementById('log-entries');
+      logEntries.innerHTML = '';
+      
+      // 添加日志
+      addLog('初始化工作流', 'system');
+      
+      // 模拟执行流程
+      const steps = simulateWorkflow(question);
+      
+      for (const step of steps) {
+        await delay(500);
+        addLog(step.message, step.node);
+      }
+      
+      // 模拟结果
+      await delay(1000);
+      document.getElementById('test-loading').classList.remove('active');
+      document.getElementById('response-area').style.display = 'block';
+      
+      // 显示响应
+      const response = generateResponse(question);
+      document.getElementById('response-area').innerHTML = `
+        <div style="margin-bottom: var(--spacing-md);">
+          <strong>🤖 助手回复：</strong>
+        </div>
+        <div style="line-height: 1.8;">
+          ${response}
+        </div>
+        ${response.includes('跳转') ? `
+          <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: var(--success-bg); border-radius: var(--radius-md);">
+            <strong>⚡ 快捷操作：</strong>
+            <button class="btn btn--primary btn--sm" style="margin-left: var(--spacing-sm);">确认跳转</button>
+          </div>
+        ` : ''}
+      `;
+      
+      addLog('工作流执行完成', 'system');
+    };
+    
+    // 模拟工作流执行
+    function simulateWorkflow(question) {
+      const steps = [];
+      const query = question.toLowerCase();
+      
+      // 知识库检索
+      steps.push({ message: '执行知识库检索', node: 'knowledge_search' });
+      
+      // 意图识别
+      steps.push({ message: '识别用户意图', node: 'intent_recognition' });
+      
+      // 根据问题类型分支
+      if (query.includes('教务') || query.includes('系统')) {
+        steps.push({ message: '意图: web_jump (网页跳转)', node: 'intent_recognition' });
+        steps.push({ message: '准备跳转确认', node: 'jump_confirm' });
+      } else if (query.includes('办理') || query.includes('补办')) {
+        steps.push({ message: '意图: service_guide (办事导航)', node: 'intent_recognition' });
+        steps.push({ message: '生成办事指南', node: 'service_guide' });
+      } else if (query.length < 10) {
+        steps.push({ message: '意图: campus_consult (校园咨询)', node: 'intent_recognition' });
+        steps.push({ message: '问题简短，需要追问', node: 'smart_clarify' });
+        steps.push({ message: '生成追问问题', node: 'smart_clarify' });
+      } else {
+        steps.push({ message: '意图: campus_consult (校园咨询)', node: 'intent_recognition' });
+        steps.push({ message: '问题清晰，直接生成答案', node: 'smart_clarify' });
+        steps.push({ message: '知识库有结果', node: 'knowledge_search' });
+        steps.push({ message: '生成答案', node: 'answer_generation' });
+      }
+      
+      // 相关推荐
+      steps.push({ message: '生成相关推荐', node: 'related_recommend' });
+      
+      return steps;
+    }
+    
+    // 生成响应
+    function generateResponse(question) {
+      const query = question.toLowerCase();
+      
+      if (query.includes('教务') || query.includes('系统')) {
+        return `🔗 我检测到您可能需要访问【教务系统】<br><br>
+                📍 跳转地址：https://jwxt.example.edu.cn<br><br>
+                请回复"确认"或"跳转"来访问该页面。`;
+      } else if (query.includes('办理') || query.includes('补办')) {
+        return `📋 <strong>学生证补办办事指南</strong><br><br>
+                📌 <strong>办理步骤：</strong><br>
+                1. 下载并填写《学生证补办申请表》<br>
+                2. 准备一寸免冠彩色证件照 1 张<br>
+                3. 前往行政楼 1 楼服务中心办理<br><br>
+                📦 <strong>所需材料：</strong><br>
+                • 身份证原件<br>
+                • 一寸证件照<br><br>
+                💡 <strong>注意事项：</strong>工本费 20 元，需 3 个工作日。`;
+      } else if (query.includes('图书馆')) {
+        return `📚 图书馆开放时间如下：<br><br>
+                <strong>周一至周五：</strong>8:00 - 22:00<br>
+                <strong>周六至周日：</strong>9:00 - 21:00<br>
+                <strong>节假日：</strong>10:00 - 17:00<br><br>
+                💡 请遵守图书馆相关规定，保持安静。`;
+      } else if (query.length < 10) {
+        return `🤔 您好，您的问题"${question}"比较简短，可以更具体一些吗？<br><br>
+                例如：<br>
+                • "请问你想查询哪个校区的图书馆开放时间呢？"<br>
+                • "你是想了解期末考试还是平时考试呢？"`;
+      } else {
+        return `根据知识库信息，为您找到相关答案...<br><br>
+                💡 您可能还想了解：<br>
+                • 相关问题 1<br>
+                • 相关问题 2<br>
+                • 相关问题 3`;
+      }
+    }
+    
+    // 添加日志
+    function addLog(message, node) {
+      const logEntries = document.getElementById('log-entries');
+      const time = new Date().toLocaleTimeString();
+      
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.innerHTML = `
+        <span class="log-entry__time">${time}</span>
+        ${node !== 'system' ? `<span class="log-entry__node">[${node}]</span>` : ''}
+        <span>${message}</span>
+      `;
+      
+      logEntries.appendChild(entry);
+      logEntries.scrollTop = logEntries.scrollHeight;
+    }
+    
+    // 延迟函数
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  </script>
+</body>
+</html>
