@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>校园校小助 - Coze 链接</title>
+  <title>校园校小助 - 快速链接</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,12 +16,13 @@
   <style>
     .links-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: var(--spacing-lg);
     }
     
     .link-card {
       display: flex;
+      flex-direction: column;
       align-items: flex-start;
       gap: var(--spacing-md);
       padding: var(--spacing-xl);
@@ -99,6 +100,62 @@
       font-size: var(--text-sm);
       line-height: 1.7;
     }
+    
+    .section-title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      margin-bottom: var(--spacing-lg);
+      color: var(--text-primary);
+    }
+    
+    .category-section {
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .category-section__title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-md);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .notification {
+      position: fixed;
+      top: var(--spacing-xl);
+      right: var(--spacing-xl);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-md);
+      background: var(--success);
+      color: white;
+      box-shadow: var(--shadow-lg);
+      z-index: 3000;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    .notification--fadeout {
+      animation: fadeOut 0.3s ease-out forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+    }
   </style>
 </head>
 <body>
@@ -134,19 +191,19 @@
         <li class="sidebar__item">
           <a href="config.html" class="sidebar__link" data-page="config">
             <span>⚙️</span>
-            <span>模块配置</span>
+            <span>配置中心</span>
           </a>
         </li>
         <li class="sidebar__item">
           <a href="links.html" class="sidebar__link sidebar__link--active" data-page="links">
             <span>🔗</span>
-            <span>Coze 链接</span>
+            <span>快速链接</span>
           </a>
         </li>
         <li class="sidebar__item">
           <a href="test.html" class="sidebar__link" data-page="test">
             <span>🧪</span>
-            <span>工作流测试</span>
+            <span>测试验证</span>
           </a>
         </li>
       </ul>
@@ -158,21 +215,131 @@
     <div class="content">
       <!-- Page Header -->
       <div class="page-header">
-        <h1 class="page-header__title">Coze 平台链接</h1>
-        <p class="page-header__subtitle">快速访问 Coze 平台相关功能页面</p>
+        <h1 class="page-header__title">快速链接</h1>
+        <p class="page-header__subtitle">一键跳转到 Coze 平台相关功能页面</p>
       </div>
 
       <!-- Info Section -->
       <div class="info-section animate-fadeIn">
         <h3>💡 使用说明</h3>
-        <p>这些链接将帮助您快速访问 Coze 平台的不同功能区域。您可以直接点击卡片跳转到相应的页面进行操作。请确保您已经登录 Coze 平台。</p>
+        <p>点击以下卡片可以快速跳转到 Coze 平台的对应功能页面。请确保您已经登录 Coze 平台账号。如果您还没有账号，请先注册。</p>
       </div>
 
-      <!-- Links Grid -->
-      <div id="links-container" class="links-grid">
-        <!-- Links will be rendered by JavaScript -->
-        <div style="text-align: center; padding: 60px 0; color: var(--text-secondary);">
-          <p>正在加载链接列表...</p>
+      <!-- Configuration Category -->
+      <div class="category-section">
+        <h3 class="category-section__title">⚙️ 配置管理</h3>
+        <div class="links-grid">
+          <a href="https://console.coze.cn/knowledge" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">📚</div>
+            <div class="link-card__content">
+              <div class="link-card__title">知识库管理</div>
+              <div class="link-card__desc">创建知识库、上传校园文档、管理知识内容</div>
+              <div class="link-card__url">console.coze.cn/knowledge</div>
+            </div>
+          </a>
+          
+          <a href="https://console.coze.cn/workflow" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">🔄</div>
+            <div class="link-card__content">
+              <div class="link-card__title">工作流管理</div>
+              <div class="link-card__desc">查看和管理您的工作流项目，配置绑定设置</div>
+              <div class="link-card__url">console.coze.cn/workflow</div>
+            </div>
+          </a>
+          
+          <a href="https://console.coze.cn/api" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">🔑</div>
+            <div class="link-card__content">
+              <div class="link-card__title">API 配置</div>
+              <div class="link-card__desc">管理 API 密钥、配置访问权限和限流规则</div>
+              <div class="link-card__url">console.coze.cn/api</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Development Category -->
+      <div class="category-section">
+        <h3 class="category-section__title">🛠️ 开发测试</h3>
+        <div class="links-grid">
+          <a href="https://console.coze.cn/editor" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">💻</div>
+            <div class="link-card__content">
+              <div class="link-card__title">Coze IDE</div>
+              <div class="link-card__desc">在线代码编辑器，开发和调试工作流</div>
+              <div class="link-card__url">console.coze.cn/editor</div>
+            </div>
+          </a>
+          
+          <a href="https://console.coze.cn/test" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">🧪</div>
+            <div class="link-card__content">
+              <div class="link-card__title">工作流测试</div>
+              <div class="link-card__desc">测试工作流执行，查看详细执行日志</div>
+              <div class="link-card__url">console.coze.cn/test</div>
+            </div>
+          </a>
+          
+          <a href="https://console.coze.cn/logs" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">📝</div>
+            <div class="link-card__content">
+              <div class="link-card__title">日志监控</div>
+              <div class="link-card__desc">查看工作流执行日志和运行监控</div>
+              <div class="link-card__url">console.coze.cn/logs</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Documentation Category -->
+      <div class="category-section">
+        <h3 class="category-section__title">📖 帮助文档</h3>
+        <div class="links-grid">
+          <a href="https://www.coze.cn/docs" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">📚</div>
+            <div class="link-card__content">
+              <div class="link-card__title">Coze 官方文档</div>
+              <div class="link-card__desc">查看平台使用指南和开发文档</div>
+              <div class="link-card__url">www.coze.cn/docs</div>
+            </div>
+          </a>
+          
+          <a href="https://www.coze.cn/docs/knowledge-base" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">❓</div>
+            <div class="link-card__content">
+              <div class="link-card__title">知识库配置指南</div>
+              <div class="link-card__desc">详细的知识库创建和配置教程</div>
+              <div class="link-card__url">www.coze.cn/docs/knowledge-base</div>
+            </div>
+          </a>
+          
+          <a href="https://www.coze.cn/docs/vibe-coding" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-card__icon">💡</div>
+            <div class="link-card__content">
+              <div class="link-card__title">Vibe 编程指南</div>
+              <div class="link-card__desc">了解 Coze Vibe 代码工作流开发</div>
+              <div class="link-card__url">www.coze.cn/docs/vibe-coding</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Shortcuts -->
+      <div class="config-section" style="margin-top: var(--spacing-xl);">
+        <h3 class="config-section__title">🚀 快捷操作</h3>
+        <div style="display: flex; flex-wrap: gap; gap: var(--spacing-md);">
+          <button class="btn btn--primary" onclick="openCoze()">
+            🌐 打开 Coze 平台首页
+          </button>
+          <button class="btn btn--secondary" onclick="openKnowledge()">
+            📚 前往知识库管理
+          </button>
+          <button class="btn btn--secondary" onclick="openWorkflow()">
+            🔄 打开工作流设置
+          </button>
+          <a href="config.html" class="btn btn--secondary">
+            ⚙️ 返回配置中心
+          </a>
         </div>
       </div>
     </div>
@@ -183,38 +350,48 @@
   <script src="js/main.js"></script>
   
   <script>
-    // 渲染链接列表
-    document.addEventListener('DOMContentLoaded', () => {
-      renderLinks();
-    });
-    
-    function renderLinks() {
-      const container = document.getElementById('links-container');
-      if (!container) return;
-      
-      let html = '';
-      
-      WORKFLOW_DATA.cozeLinks.forEach((link, index) => {
-        html += `
-          <a href="${link.url}" 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="link-card animate-fadeIn" 
-             style="animation-delay: ${index * 0.1}s;">
-            <div class="link-card__icon">
-              ${link.icon}
-            </div>
-            <div class="link-card__content">
-              <div class="link-card__title">${link.title}</div>
-              <div class="link-card__desc">${link.description}</div>
-              <div class="link-card__url">${link.url}</div>
-            </div>
-          </a>
-        `;
-      });
-      
-      container.innerHTML = html;
+    // 快捷函数
+    function openCoze() {
+      window.open('https://console.coze.cn', '_blank');
+      showNotification('正在打开 Coze 平台...');
     }
+    
+    function openKnowledge() {
+      window.open('https://console.coze.cn/knowledge', '_blank');
+      showNotification('正在打开知识库管理...');
+    }
+    
+    function openWorkflow() {
+      window.open('https://console.coze.cn/workflow', '_blank');
+      showNotification('正在打开工作流管理...');
+    }
+    
+    // 显示通知
+    function showNotification(message) {
+      // 移除已存在的通知
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
+      
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.innerHTML = `<span>✅ ${message}</span>`;
+      
+      document.body.appendChild(notification);
+      
+      // 自动消失
+      setTimeout(() => {
+        notification.classList.add('notification--fadeout');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+    
+    // 点击卡片显示提示
+    document.querySelectorAll('.link-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        const title = this.querySelector('.link-card__title').textContent;
+        showNotification(`正在打开「${title}」...`);
+      });
+    });
   </script>
 </body>
 </html>

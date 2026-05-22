@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>校园校小助 - 模块配置</title>
+  <title>校园校小助 - 配置中心</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,42 +14,131 @@
   <link rel="stylesheet" href="css/style.css">
   
   <style>
-    .config-tabs {
-      display: flex;
-      gap: var(--spacing-sm);
+    /* 简化配置页面样式 */
+    .wizard-step {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: var(--spacing-xl);
+      border-radius: var(--radius-xl);
       margin-bottom: var(--spacing-xl);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: var(--spacing-md);
+      text-align: center;
     }
     
-    .tab-btn {
-      padding: var(--spacing-sm) var(--spacing-lg);
-      background: transparent;
-      border: none;
+    .wizard-step__number {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+      font-weight: 700;
+      margin: 0 auto var(--spacing-md);
+    }
+    
+    .wizard-step__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .wizard-step__desc {
+      opacity: 0.9;
       font-size: var(--text-sm);
-      font-weight: 500;
-      color: var(--text-secondary);
-      cursor: pointer;
+    }
+    
+    .config-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .config-card__header {
+      padding: var(--spacing-lg);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+    
+    .config-card__icon {
+      width: 40px;
+      height: 40px;
       border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+    }
+    
+    .config-card__title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .config-card__body {
+      padding: var(--spacing-lg);
+    }
+    
+    .config-card__body p {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 500;
       transition: all var(--transition);
     }
     
-    .tab-btn:hover {
+    .action-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .action-btn--secondary {
       background: var(--bg-tertiary);
       color: var(--text-primary);
     }
     
-    .tab-btn.active {
+    .action-btn--secondary:hover {
+      background: var(--border);
+    }
+    
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .step-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all var(--transition);
+    }
+    
+    .step-dot.active {
       background: var(--primary);
-      color: white;
+      transform: scale(1.3);
     }
     
-    .tab-content {
-      display: none;
-    }
-    
-    .tab-content.active {
-      display: block;
+    .step-dot.completed {
+      background: var(--success);
     }
     
     .config-section {
@@ -159,6 +248,11 @@
       color: white;
     }
     
+    .notification--info {
+      background: var(--info);
+      color: white;
+    }
+    
     .notification--fadeout {
       animation: fadeOut 0.3s ease-out forwards;
     }
@@ -179,6 +273,65 @@
         opacity: 0;
         transform: translateX(100px);
       }
+    }
+    
+    .help-card {
+      background: var(--info-bg);
+      border-left: 4px solid var(--info);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .help-card__title {
+      font-weight: 600;
+      color: var(--info);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .help-card__content {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+    }
+    
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+    }
+    
+    .status-badge--success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    
+    .status-badge--warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+    
+    .status-badge--error {
+      background: var(--error-bg);
+      color: var(--error);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .progress-bar__fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+      border-radius: 4px;
+      transition: width var(--transition);
     }
   </style>
 </head>
@@ -215,19 +368,19 @@
         <li class="sidebar__item">
           <a href="config.html" class="sidebar__link sidebar__link--active" data-page="config">
             <span>⚙️</span>
-            <span>模块配置</span>
+            <span>配置中心</span>
           </a>
         </li>
         <li class="sidebar__item">
           <a href="links.html" class="sidebar__link" data-page="links">
             <span>🔗</span>
-            <span>Coze 链接</span>
+            <span>快速链接</span>
           </a>
         </li>
         <li class="sidebar__item">
           <a href="test.html" class="sidebar__link" data-page="test">
             <span>🧪</span>
-            <span>工作流测试</span>
+            <span>测试验证</span>
           </a>
         </li>
       </ul>
@@ -239,22 +392,106 @@
     <div class="content">
       <!-- Page Header -->
       <div class="page-header">
-        <h1 class="page-header__title">模块配置</h1>
-        <p class="page-header__subtitle">配置工作流的参数和功能开关</p>
+        <h1 class="page-header__title">配置中心</h1>
+        <p class="page-header__subtitle">简单三步，完成工作流配置</p>
       </div>
 
-      <!-- Tabs -->
-      <div class="config-tabs">
-        <button class="tab-btn active" data-tab="llm">LLM 配置</button>
-        <button class="tab-btn" data-tab="knowledge">知识库</button>
-        <button class="tab-btn" data-tab="features">功能开关</button>
+      <!-- 进度指示 -->
+      <div class="step-indicator">
+        <div class="step-dot completed" title="步骤1：知识库"></div>
+        <div class="step-dot" title="步骤2：模型配置"></div>
+        <div class="step-dot" title="步骤3：功能开关"></div>
+        <div class="step-dot" title="步骤4：测试验证"></div>
       </div>
 
-      <!-- LLM Config -->
-      <div id="tab-llm" class="tab-content active">
-        <div class="config-section animate-fadeIn">
-          <h3 class="config-section__title">🧠 大语言模型配置</h3>
-          <form id="llm-config-form">
+      <!-- 进度条 -->
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: 25%"></div>
+      </div>
+      <p style="text-align: center; color: var(--text-secondary); font-size: var(--text-sm); margin-bottom: var(--spacing-xl);">
+        已完成 1/4 步骤
+      </p>
+
+      <!-- 引导卡片 -->
+      <div class="wizard-step animate-fadeIn">
+        <div class="wizard-step__number">📚</div>
+        <div class="wizard-step__title">第一步：配置知识库</div>
+        <div class="wizard-step__desc">将您的校园文档上传到 Coze 知识库，让校小助了解校园信息</div>
+      </div>
+
+      <!-- 知识库配置卡片 -->
+      <div class="config-card animate-fadeIn">
+        <div class="config-card__header">
+          <div class="config-card__icon" style="background: var(--success-bg); color: var(--success);">📚</div>
+          <div>
+            <h3 class="config-card__title">知识库配置</h3>
+            <span class="status-badge status-badge--warning">尚未配置</span>
+          </div>
+        </div>
+        <div class="config-card__body">
+          <p>知识库是校小助的"大脑"，包含校园的各种信息（如校规校纪、办事流程、开放时间等）。</p>
+          
+          <div class="help-card">
+            <div class="help-card__title">💡 操作指南</div>
+            <div class="help-card__content">
+              <ol style="margin: 0; padding-left: var(--spacing-md);">
+                <li>点击下方按钮跳转到 Coze 平台</li>
+                <li>创建一个知识库并命名为"校园校小助知识库"</li>
+                <li>上传您的校园文档（通知、指南等）</li>
+                <li>在工作流设置中绑定这个知识库</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: var(--spacing-md);">
+            <a href="https://console.coze.cn" target="_blank" class="action-btn">
+              🚀 前往 Coze 配置知识库
+            </a>
+            <button class="action-btn action-btn--secondary" onclick="showKnowledgeHelp()">
+              ❓ 详细步骤说明
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- API 配置卡片 -->
+      <div class="config-card animate-fadeIn" style="animation-delay: 0.1s;">
+        <div class="config-card__header">
+          <div class="config-card__icon" style="background: var(--info-bg); color: var(--info);">🔑</div>
+          <div>
+            <h3 class="config-card__title">API 配置</h3>
+            <span class="status-badge status-badge--success">自动配置</span>
+          </div>
+        </div>
+        <div class="config-card__body">
+          <p>本工作流使用 Coze 平台内置技能，<strong>无需手动配置 API 密钥</strong>！</p>
+          
+          <div class="help-card">
+            <div class="help-card__title">✨ 自动配置说明</div>
+            <div class="help-card__content">
+              <p>Coze Vibe 项目会自动从平台获取所需的 API 配置，包括：</p>
+              <ul style="margin: var(--spacing-sm) 0; padding-left: var(--spacing-md);">
+                <li>大语言模型（LLM）</li>
+                <li>知识库检索</li>
+                <li>联网搜索</li>
+              </ul>
+              <p>您只需完成知识库配置即可！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模型配置卡片 -->
+      <div class="config-card animate-fadeIn" style="animation-delay: 0.2s;">
+        <div class="config-card__header">
+          <div class="config-card__icon" style="background: var(--warning-bg); color: var(--warning);">🧠</div>
+          <div>
+            <h3 class="config-card__title">语言模型配置</h3>
+            <span class="status-badge status-badge--success">已配置</span>
+          </div>
+        </div>
+        <div class="config-card__body">
+          <form id="llm-form">
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">模型名称</label>
@@ -263,172 +500,190 @@
                        name="model" 
                        value="doubao-seed-2-0-lite-260215"
                        placeholder="输入模型名称">
-                <div class="form-help">Coze 平台支持的模型名称</div>
+                <div class="form-help">推荐使用：doubao-seed-2-0-lite-260215</div>
               </div>
               
               <div class="form-group">
-                <label class="form-label">Temperature</label>
-                <input type="number" 
+                <label class="form-label">智能程度 (Temperature)</label>
+                <input type="range" 
                        class="form-input" 
                        name="temperature" 
                        value="0.3"
                        min="0"
                        max="2"
-                       step="0.1">
-                <div class="form-help">控制输出的随机性 (0-2)</div>
-              </div>
-            </div>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Max Tokens</label>
-                <input type="number" 
-                       class="form-input" 
-                       name="max_tokens"
-                       value="2000"
-                       min="100"
-                       max="8000">
-                <div class="form-help">单次回复的最大令牌数</div>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">系统提示词</label>
-                <input type="text" 
-                       class="form-input" 
-                       name="system_prompt"
-                       value="你是一个校园智能助手..."
-                       placeholder="输入系统提示词">
+                       step="0.1"
+                       oninput="this.nextElementSibling.value = this.value">
+                <output style="display: block; text-align: right; color: var(--text-secondary); font-size: var(--text-sm);">0.3</output>
+                <div class="form-help">数值越小回答越稳定，越大越有创意 (建议: 0.2-0.5)</div>
               </div>
             </div>
             
             <div class="form-group">
-              <button type="submit" class="btn btn--primary">💾 保存配置</button>
+              <button type="submit" class="btn btn--primary">💾 保存模型配置</button>
             </div>
           </form>
         </div>
       </div>
 
-      <!-- Knowledge Config -->
-      <div id="tab-knowledge" class="tab-content">
-        <div class="config-section animate-fadeIn">
-          <h3 class="config-section__title">📚 知识库配置</h3>
-          <form id="knowledge-config-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Top K</label>
-                <input type="number" 
-                       class="form-input" 
-                       name="top_k"
-                       value="3"
-                       min="1"
-                       max="10">
-                <div class="form-help">返回的最相关结果数量</div>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">最小相似度分数</label>
-                <input type="number" 
-                       class="form-input" 
-                       name="min_score"
-                       value="0.5"
-                       min="0"
-                       max="1"
-                       step="0.1">
-                <div class="form-help">低于此分数的结果将被过滤</div>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">知识库 ID</label>
-              <input type="text" 
-                     class="form-input" 
-                     name="knowledge_base_id"
-                     placeholder="输入知识库 ID">
-              <div class="form-help">在 Coze 平台获取的知识库标识符</div>
-            </div>
-            
-            <div class="form-group">
-              <button type="submit" class="btn btn--primary">💾 保存配置</button>
-            </div>
-          </form>
+      <!-- 功能开关卡片 -->
+      <div class="config-card animate-fadeIn" style="animation-delay: 0.3s;">
+        <div class="config-card__header">
+          <div class="config-card__icon" style="background: var(--primary-bg); color: var(--primary);">⚡</div>
+          <div>
+            <h3 class="config-card__title">功能开关</h3>
+            <span class="status-badge status-badge--success">全部启用</span>
+          </div>
         </div>
-      </div>
-
-      <!-- Features Config -->
-      <div id="tab-features" class="tab-content">
-        <div class="config-section animate-fadeIn">
-          <h3 class="config-section__title">⚡ 功能开关</h3>
-          <form id="features-config-form">
+        <div class="config-card__body">
+          <form id="features-form">
             <div class="toggle-group">
               <div>
-                <div class="toggle-group__label">知识库优先模式</div>
-                <div class="toggle-group__desc">始终优先检索知识库，无结果再联网搜索</div>
+                <div class="toggle-group__label">🔍 知识库优先模式</div>
+                <div class="toggle-group__desc">始终优先从知识库获取答案，无结果时再联网搜索</div>
               </div>
               <div class="toggle active" data-toggle="knowledge_first" onclick="toggleSwitch(this)"></div>
             </div>
             
             <div class="toggle-group">
               <div>
-                <div class="toggle-group__label">联网搜索</div>
-                <div class="toggle-group__desc">知识库无结果时启用联网搜索兜底</div>
+                <div class="toggle-group__label">🌐 联网搜索兜底</div>
+                <div class="toggle-group__desc">知识库没有答案时，自动使用联网搜索</div>
               </div>
               <div class="toggle active" data-toggle="web_search_enabled" onclick="toggleSwitch(this)"></div>
             </div>
             
             <div class="toggle-group">
               <div>
-                <div class="toggle-group__label">网页跳转</div>
-                <div class="toggle-group__desc">识别用户跳转意图并提供跳转确认</div>
+                <div class="toggle-group__label">🔗 网页跳转功能</div>
+                <div class="toggle-group__desc">识别用户跳转需求（如"打开教务系统"）</div>
               </div>
               <div class="toggle active" data-toggle="jump_enabled" onclick="toggleSwitch(this)"></div>
             </div>
             
             <div class="toggle-group">
               <div>
-                <div class="toggle-group__label">智能追问</div>
-                <div class="toggle-group__desc">问题模糊时主动追问澄清</div>
+                <div class="toggle-group__label">💬 智能追问</div>
+                <div class="toggle-group__desc">问题模糊时主动追问澄清（如"哪个校区？"）</div>
               </div>
               <div class="toggle active" data-toggle="clarify_enabled" onclick="toggleSwitch(this)"></div>
             </div>
             
             <div class="toggle-group">
               <div>
-                <div class="toggle-group__label">相关推荐</div>
+                <div class="toggle-group__label">🎯 相关推荐</div>
                 <div class="toggle-group__desc">回答后推荐相关问题和快捷操作</div>
               </div>
               <div class="toggle active" data-toggle="recommend_enabled" onclick="toggleSwitch(this)"></div>
             </div>
             
             <div class="form-group" style="margin-top: var(--spacing-xl);">
-              <button type="submit" class="btn btn--primary">💾 保存配置</button>
+              <button type="submit" class="btn btn--primary">💾 保存功能配置</button>
             </div>
           </form>
         </div>
       </div>
+
+      <!-- 快捷操作 -->
+      <div class="config-section animate-fadeIn" style="animation-delay: 0.4s;">
+        <h3 class="config-section__title">🚀 快捷操作</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+          <button class="action-btn" style="justify-content: center;" onclick="resetConfig()">
+            🔄 重置配置
+          </button>
+          <button class="action-btn action-btn--secondary" style="justify-content: center;" onclick="exportConfig()">
+            📤 导出配置
+          </button>
+          <button class="action-btn action-btn--secondary" style="justify-content: center;" onclick="importConfig()">
+            📥 导入配置
+          </button>
+          <a href="test.html" class="action-btn" style="justify-content: center;">
+            🧪 测试工作流
+          </a>
+        </div>
+      </div>
     </div>
   </main>
+
+  <!-- 帮助弹窗 -->
+  <div id="knowledge-help-modal" class="modal" style="display: none;">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2>📚 知识库配置详细指南</h2>
+        <button class="modal__close" onclick="document.getElementById('knowledge-help-modal').style.display='none'">&times;</button>
+      </div>
+      <div class="modal__body">
+        <div style="margin-bottom: var(--spacing-lg);">
+          <h3>第一步：登录 Coze 平台</h3>
+          <p>访问 <a href="https://console.coze.cn" target="_blank">https://console.coze.cn</a> 登录您的账号</p>
+        </div>
+        
+        <div style="margin-bottom: var(--spacing-lg);">
+          <h3>第二步：进入知识库管理</h3>
+          <p>在左侧导航栏找到「知识库」或「Knowledge Base」选项，点击进入</p>
+        </div>
+        
+        <div style="margin-bottom: var(--spacing-lg);">
+          <h3>第三步：创建知识库</h3>
+          <ol>
+            <li>点击「创建知识库」按钮</li>
+            <li>输入知识库名称：<strong>校园校小助知识库</strong></li>
+            <li>选择知识库类型：文档型知识库</li>
+            <li>点击「创建」</li>
+          </ol>
+        </div>
+        
+        <div style="margin-bottom: var(--spacing-lg);">
+          <h3>第四步：上传文档</h3>
+          <ol>
+            <li>进入知识库详情页</li>
+            <li>点击「上传文档」</li>
+            <li>选择您的校园文档（支持 PDF、Word、TXT、Markdown 等格式）</li>
+            <li>等待文档解析完成</li>
+          </ol>
+        </div>
+        
+        <div style="margin-bottom: var(--spacing-lg);">
+          <h3>第五步：绑定到工作流</h3>
+          <ol>
+            <li>返回您的工作流项目</li>
+            <li>找到「工作流设置」或「Workflow Settings」</li>
+            <li>在「知识库绑定」中选择您创建的知识库</li>
+            <li>点击「保存」</li>
+          </ol>
+        </div>
+        
+        <div class="help-card">
+          <div class="help-card__title">💡 提示</div>
+          <div class="help-card__content">
+            <p>上传的文档越多，校小助的回答越准确！建议上传：</p>
+            <ul>
+              <li>校园通知和公告</li>
+              <li>校规校纪</li>
+              <li>办事指南和流程</li>
+              <li>图书馆开放时间</li>
+              <li>食堂作息</li>
+              <li>考试安排</li>
+              <li>奖学金评定标准</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--secondary" onclick="document.getElementById('knowledge-help-modal').style.display='none'">我知道了</button>
+        <a href="https://console.coze.cn" target="_blank" class="btn btn--primary">前往配置</a>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="js/workflow-data.js"></script>
   <script src="js/main.js"></script>
   
   <script>
-    // Tab 切换
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const tabId = this.getAttribute('data-tab');
-        
-        // 切换按钮状态
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        
-        // 切换内容
-        document.querySelectorAll('.tab-content').forEach(content => {
-          content.classList.remove('active');
-        });
-        document.getElementById(`tab-${tabId}`).classList.add('active');
-      });
-    });
+    // 显示知识库帮助
+    window.showKnowledgeHelp = function() {
+      document.getElementById('knowledge-help-modal').style.display = 'flex';
+    };
     
     // Toggle Switch
     window.toggleSwitch = function(element) {
@@ -456,7 +711,7 @@
         localStorage.setItem('workflow_config', JSON.stringify(config));
         
         // 显示通知
-        showNotification('配置已保存', 'success');
+        showNotification('配置已保存成功！', 'success');
       });
     });
     
@@ -469,7 +724,7 @@
       const notification = document.createElement('div');
       notification.className = `notification notification--${type}`;
       notification.innerHTML = `
-        <span>✅ ${message}</span>
+        <span>${message}</span>
       `;
       
       document.body.appendChild(notification);
@@ -494,6 +749,12 @@
           const input = document.querySelector(`[name="${key}"]`);
           if (input) {
             input.value = config[key];
+            
+            // 更新 range 输入的 output 元素
+            const output = input.nextElementSibling;
+            if (output && output.tagName === 'OUTPUT') {
+              output.value = config[key];
+            }
           }
           
           // 恢复开关状态
@@ -507,8 +768,69 @@
       }
     }
     
+    // 重置配置
+    window.resetConfig = function() {
+      if (confirm('确定要重置所有配置吗？')) {
+        localStorage.removeItem('workflow_config');
+        location.reload();
+      }
+    };
+    
+    // 导出配置
+    window.exportConfig = function() {
+      const config = localStorage.getItem('workflow_config');
+      if (!config) {
+        showNotification('没有可导出的配置', 'warning');
+        return;
+      }
+      
+      const blob = new Blob([config], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'workflow_config.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showNotification('配置已导出！', 'success');
+    };
+    
+    // 导入配置
+    window.importConfig = function() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          try {
+            const config = JSON.parse(event.target.result);
+            localStorage.setItem('workflow_config', JSON.stringify(config));
+            showNotification('配置已导入！', 'success');
+            setTimeout(() => location.reload(), 1000);
+          } catch (error) {
+            showNotification('导入失败，请检查文件格式', 'error');
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    };
+    
     // 页面加载时恢复配置
     document.addEventListener('DOMContentLoaded', loadSavedConfig);
+    
+    // 关闭弹窗点击外部
+    document.querySelector('.modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>

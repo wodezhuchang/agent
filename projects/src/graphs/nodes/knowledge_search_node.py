@@ -30,6 +30,8 @@ def knowledge_search_node(
     # 执行语义搜索
     try:
         # 搜索知识库，top_k=3获取最相关的3条结果
+        # 注意：在Coze平台部署时，知识库会通过上下文自动绑定
+        # 本地测试时，需要在Coze IDE中配置知识库绑定
         response = knowledge_client.search(
             query=state.user_query,
             top_k=3,
