@@ -1,0 +1,63 @@
+{
+  "timestamp": "2026-05-22T21:04:09.707720",
+  "config_check": {
+    "config_file": "c:\\Users\\yangd\\Documents\\GitHub\\agent\\projects\\config\\knowledge_config.json",
+    "has_config": true,
+    "kb_id": "7641207989772730420?force_stay=1",
+    "config": {
+      "knowledge_base_id": "7641207989772730420?force_stay=1",
+      "knowledge_base_name": "校园校小助知识库",
+      "top_k": 3,
+      "min_score": 0.5,
+      "enabled": true,
+      "description": "校园校小助知识库配置，用于存储校园通知、校规校纪、办事指南等"
+    }
+  },
+  "env_check": {
+    "has_env": false,
+    "kb_id": null
+  },
+  "state_check": {
+    "has_state_module": false,
+    "error": "cannot import name 'get_knowledge_base_id' from 'graphs.state' (c:\\Users\\yangd\\Documents\\GitHub\\agent\\projects\\src\\graphs\\state.py)"
+  },
+  "code_check": {
+    "has_node_file": true,
+    "node_file": "c:\\Users\\yangd\\Documents\\GitHub\\agent\\projects\\src\\graphs\\nodes\\knowledge_search_node.py"
+  },
+  "local_test": {
+    "results": [
+      {
+        "query": "图书馆开放时间",
+        "has_result": true,
+        "score": 0.8,
+        "content": "图书馆开放时间：周一至周五 8:00-22:00，周末 9:00-21:00"
+      },
+      {
+        "query": "选课时间",
+        "has_result": true,
+        "score": 0.8,
+        "content": "选课时间：2024年春季学期选课时间为2月15日-2月20日"
+      },
+      {
+        "query": "学生证补办",
+        "has_result": true,
+        "score": 0.8,
+        "content": "学生证补办：携带身份证到教务处办理，费用20元，办公地点：行政楼201室"
+      },
+      {
+        "query": "考试安排",
+        "has_result": true,
+        "score": 0.8,
+        "content": "考试安排：期末考试时间为6月15日-6月25日"
+      },
+      {
+        "query": "校规校纪",
+        "has_result": true,
+        "score": 0.8,
+        "content": "校规校纪：按时上课，不迟到早退，遵守考试纪律，爱护公物"
+      }
+    ],
+    "all_ok": true
+  }
+}
