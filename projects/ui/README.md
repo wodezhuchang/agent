@@ -152,7 +152,7 @@ cozeLinks: [
     id: 'coze-ide',
     title: 'Coze IDE',
     description: '工作流编辑器',
-    url: 'https://console.coze.cn',
+    url: 'https://www.coze.cn',
     icon: '🔧'
   },
   // 添加更多链接...

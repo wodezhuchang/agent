@@ -223,28 +223,28 @@ const WORKFLOW_DATA = {
       id: 'coze-ide',
       title: 'Coze IDE',
       description: '打开 Coze 工作流编辑器，进行工作流的开发和调试',
-      url: 'https://console.coze.cn',
+      url: 'https://www.coze.cn',
       icon: '🔧'
     },
     {
       id: 'knowledge-base',
       title: '知识库管理',
       description: '管理校园专属知识库，上传和更新文档内容',
-      url: 'https://console.coze.cn/knowledge',
+      url: 'https://www.coze.cn/knowledge',
       icon: '📚'
     },
     {
       id: 'api-config',
       title: 'API 配置',
       description: '配置工作流 API，设置访问权限和限流规则',
-      url: 'https://console.coze.cn/api',
+      url: 'https://www.coze.cn/api',
       icon: '⚙️'
     },
     {
       id: 'workflow-test',
       title: '工作流测试',
       description: '在 Coze 平台测试工作流，查看执行日志',
-      url: 'https://console.coze.cn/workflow',
+      url: 'https://www.coze.cn/workflow',
       icon: '🧪'
     }
   ],

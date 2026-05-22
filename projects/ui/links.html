@@ -32,6 +32,7 @@
       transition: all var(--transition);
       cursor: pointer;
       text-decoration: none;
+      position: relative;
     }
     
     .link-card:hover {
@@ -39,6 +40,12 @@
       background: var(--primary-bg);
       transform: translateY(-2px);
       box-shadow: var(--shadow-lg);
+    }
+    
+    .link-card.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
     
     .link-card__icon {
@@ -128,11 +135,24 @@
       right: var(--spacing-xl);
       padding: var(--spacing-md) var(--spacing-lg);
       border-radius: var(--radius-md);
-      background: var(--success);
-      color: white;
       box-shadow: var(--shadow-lg);
       z-index: 3000;
       animation: slideIn 0.3s ease-out;
+    }
+    
+    .notification--success {
+      background: var(--success);
+      color: white;
+    }
+    
+    .notification--error {
+      background: var(--error);
+      color: white;
+    }
+    
+    .notification--warning {
+      background: var(--warning);
+      color: white;
     }
     
     .notification--fadeout {
@@ -156,6 +176,30 @@
         transform: translateX(100px);
       }
     }
+    
+    .copy-btn {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      padding: 4px 8px;
+      background: var(--bg-tertiary);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    
+    .copy-btn:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+    
+    .copy-btn.copied {
+      background: var(--success);
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -166,7 +210,7 @@
       <span>校园校小助</span>
     </div>
     <nav class="header__nav">
-      <a href="https://console.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
+      <a href="https://www.coze.cn" target="_blank" rel="noopener noreferrer" class="header__link">
         🔗 Coze 平台
       </a>
     </nav>
@@ -222,39 +266,42 @@
       <!-- Info Section -->
       <div class="info-section animate-fadeIn">
         <h3>💡 使用说明</h3>
-        <p>点击以下卡片可以快速跳转到 Coze 平台的对应功能页面。请确保您已经登录 Coze 平台账号。如果您还没有账号，请先注册。</p>
+        <p>点击以下卡片可以快速跳转到 Coze 平台的对应功能页面。如果链接无法打开，请尝试手动访问 Coze 官网：<a href="https://www.coze.cn" target="_blank" style="color: var(--primary);">https://www.coze.cn</a></p>
       </div>
 
       <!-- Configuration Category -->
       <div class="category-section">
         <h3 class="category-section__title">⚙️ 配置管理</h3>
         <div class="links-grid">
-          <a href="https://console.coze.cn/knowledge" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-card" data-url="https://www.coze.cn">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">📚</div>
             <div class="link-card__content">
               <div class="link-card__title">知识库管理</div>
               <div class="link-card__desc">创建知识库、上传校园文档、管理知识内容</div>
-              <div class="link-card__url">console.coze.cn/knowledge</div>
+              <div class="link-card__url">www.coze.cn → 知识库</div>
             </div>
-          </a>
+          </div>
           
-          <a href="https://console.coze.cn/workflow" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-card" data-url="https://www.coze.cn">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">🔄</div>
             <div class="link-card__content">
               <div class="link-card__title">工作流管理</div>
               <div class="link-card__desc">查看和管理您的工作流项目，配置绑定设置</div>
-              <div class="link-card__url">console.coze.cn/workflow</div>
+              <div class="link-card__url">www.coze.cn → 工作流</div>
             </div>
-          </a>
+          </div>
           
-          <a href="https://console.coze.cn/api" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-card" data-url="https://www.coze.cn">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">🔑</div>
             <div class="link-card__content">
               <div class="link-card__title">API 配置</div>
               <div class="link-card__desc">管理 API 密钥、配置访问权限和限流规则</div>
-              <div class="link-card__url">console.coze.cn/api</div>
+              <div class="link-card__url">www.coze.cn → API设置</div>
             </div>
-          </a>
+          </div>
         </div>
       </div>
 
@@ -262,32 +309,35 @@
       <div class="category-section">
         <h3 class="category-section__title">🛠️ 开发测试</h3>
         <div class="links-grid">
-          <a href="https://console.coze.cn/editor" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-card" data-url="https://www.coze.cn">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">💻</div>
             <div class="link-card__content">
               <div class="link-card__title">Coze IDE</div>
               <div class="link-card__desc">在线代码编辑器，开发和调试工作流</div>
-              <div class="link-card__url">console.coze.cn/editor</div>
+              <div class="link-card__url">www.coze.cn → IDE</div>
             </div>
-          </a>
+          </div>
           
-          <a href="https://console.coze.cn/test" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-card" data-url="https://www.coze.cn">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">🧪</div>
             <div class="link-card__content">
               <div class="link-card__title">工作流测试</div>
               <div class="link-card__desc">测试工作流执行，查看详细执行日志</div>
-              <div class="link-card__url">console.coze.cn/test</div>
+              <div class="link-card__url">www.coze.cn → 测试</div>
             </div>
-          </a>
+          </div>
           
-          <a href="https://console.coze.cn/logs" target="_blank" rel="noopener noreferrer" class="link-card">
+          <div class="link-card" data-url="https://www.coze.cn">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">📝</div>
             <div class="link-card__content">
               <div class="link-card__title">日志监控</div>
               <div class="link-card__desc">查看工作流执行日志和运行监控</div>
-              <div class="link-card__url">console.coze.cn/logs</div>
+              <div class="link-card__url">www.coze.cn → 日志</div>
             </div>
-          </a>
+          </div>
         </div>
       </div>
 
@@ -296,6 +346,7 @@
         <h3 class="category-section__title">📖 帮助文档</h3>
         <div class="links-grid">
           <a href="https://www.coze.cn/docs" target="_blank" rel="noopener noreferrer" class="link-card">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">📚</div>
             <div class="link-card__content">
               <div class="link-card__title">Coze 官方文档</div>
@@ -304,21 +355,65 @@
             </div>
           </a>
           
-          <a href="https://www.coze.cn/docs/knowledge-base" target="_blank" rel="noopener noreferrer" class="link-card">
+          <a href="https://www.coze.cn/docs" target="_blank" rel="noopener noreferrer" class="link-card">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">❓</div>
             <div class="link-card__content">
               <div class="link-card__title">知识库配置指南</div>
               <div class="link-card__desc">详细的知识库创建和配置教程</div>
-              <div class="link-card__url">www.coze.cn/docs/knowledge-base</div>
+              <div class="link-card__url">www.coze.cn/docs</div>
             </div>
           </a>
           
-          <a href="https://www.coze.cn/docs/vibe-coding" target="_blank" rel="noopener noreferrer" class="link-card">
+          <a href="https://www.coze.cn/docs" target="_blank" rel="noopener noreferrer" class="link-card">
+            <button class="copy-btn" onclick="copyLink(this)">复制链接</button>
             <div class="link-card__icon">💡</div>
             <div class="link-card__content">
               <div class="link-card__title">Vibe 编程指南</div>
               <div class="link-card__desc">了解 Coze Vibe 代码工作流开发</div>
-              <div class="link-card__url">www.coze.cn/docs/vibe-coding</div>
+              <div class="link-card__url">www.coze.cn/docs</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Local Links Category -->
+      <div class="category-section">
+        <h3 class="category-section__title">📁 本地文件</h3>
+        <div class="links-grid">
+          <a href="index.html" class="link-card">
+            <div class="link-card__icon">📊</div>
+            <div class="link-card__content">
+              <div class="link-card__title">工作流概览</div>
+              <div class="link-card__desc">查看工作流流程图和架构说明</div>
+              <div class="link-card__url">index.html</div>
+            </div>
+          </a>
+          
+          <a href="nodes.html" class="link-card">
+            <div class="link-card__icon">🔧</div>
+            <div class="link-card__content">
+              <div class="link-card__title">节点列表</div>
+              <div class="link-card__desc">查看所有工作流节点的详细信息</div>
+              <div class="link-card__url">nodes.html</div>
+            </div>
+          </a>
+          
+          <a href="config.html" class="link-card">
+            <div class="link-card__icon">⚙️</div>
+            <div class="link-card__content">
+              <div class="link-card__title">配置中心</div>
+              <div class="link-card__desc">配置知识库、模型和功能开关</div>
+              <div class="link-card__url">config.html</div>
+            </div>
+          </a>
+          
+          <a href="test.html" class="link-card">
+            <div class="link-card__icon">🧪</div>
+            <div class="link-card__content">
+              <div class="link-card__title">测试验证</div>
+              <div class="link-card__desc">测试工作流的各项功能</div>
+              <div class="link-card__url">test.html</div>
             </div>
           </a>
         </div>
@@ -328,18 +423,18 @@
       <div class="config-section" style="margin-top: var(--spacing-xl);">
         <h3 class="config-section__title">🚀 快捷操作</h3>
         <div style="display: flex; flex-wrap: gap; gap: var(--spacing-md);">
-          <button class="btn btn--primary" onclick="openCoze()">
+          <button class="btn btn--primary" onclick="openLink('https://www.coze.cn')">
             🌐 打开 Coze 平台首页
           </button>
-          <button class="btn btn--secondary" onclick="openKnowledge()">
+          <button class="btn btn--secondary" onclick="openLink('https://www.coze.cn')">
             📚 前往知识库管理
           </button>
-          <button class="btn btn--secondary" onclick="openWorkflow()">
+          <button class="btn btn--secondary" onclick="openLink('https://www.coze.cn')">
             🔄 打开工作流设置
           </button>
-          <a href="config.html" class="btn btn--secondary">
-            ⚙️ 返回配置中心
-          </a>
+          <button class="btn btn--secondary" onclick="copyCozeUrl()">
+            📋 复制 Coze 官网地址
+          </button>
         </div>
       </div>
     </div>
@@ -350,31 +445,70 @@
   <script src="js/main.js"></script>
   
   <script>
-    // 快捷函数
-    function openCoze() {
-      window.open('https://console.coze.cn', '_blank');
-      showNotification('正在打开 Coze 平台...');
+    // 打开链接
+    function openLink(url) {
+      try {
+        const newWindow = window.open(url, '_blank');
+        if (newWindow) {
+          showNotification(`正在打开 ${url}...`, 'success');
+        } else {
+          showNotification('浏览器阻止了弹窗，请允许弹窗或手动访问链接', 'warning');
+          navigator.clipboard.writeText(url).then(() => {
+            showNotification('链接已复制到剪贴板', 'success');
+          });
+        }
+      } catch (error) {
+        showNotification('无法打开链接，请手动访问', 'error');
+        navigator.clipboard.writeText(url).then(() => {
+          showNotification('链接已复制到剪贴板', 'success');
+        });
+      }
     }
     
-    function openKnowledge() {
-      window.open('https://console.coze.cn/knowledge', '_blank');
-      showNotification('正在打开知识库管理...');
+    // 复制链接
+    function copyLink(button) {
+      const card = button.parentElement;
+      const url = card.getAttribute('data-url') || card.getAttribute('href');
+      
+      if (url) {
+        navigator.clipboard.writeText(url).then(() => {
+          button.textContent = '已复制';
+          button.classList.add('copied');
+          setTimeout(() => {
+            button.textContent = '复制链接';
+            button.classList.remove('copied');
+          }, 2000);
+          showNotification('链接已复制到剪贴板', 'success');
+        }).catch(() => {
+          showNotification('复制失败，请手动复制', 'error');
+        });
+      }
     }
     
-    function openWorkflow() {
-      window.open('https://console.coze.cn/workflow', '_blank');
-      showNotification('正在打开工作流管理...');
+    // 复制 Coze 官网地址
+    function copyCozeUrl() {
+      const url = 'https://www.coze.cn';
+      navigator.clipboard.writeText(url).then(() => {
+        showNotification('链接已复制到剪贴板', 'success');
+      }).catch(() => {
+        showNotification('复制失败，请手动复制', 'error');
+      });
     }
     
     // 显示通知
-    function showNotification(message) {
+    function showNotification(message, type = 'success') {
       // 移除已存在的通知
       const existing = document.querySelector('.notification');
       if (existing) existing.remove();
       
       const notification = document.createElement('div');
-      notification.className = 'notification';
-      notification.innerHTML = `<span>✅ ${message}</span>`;
+      notification.className = `notification notification--${type}`;
+      
+      let icon = '✅';
+      if (type === 'error') icon = '❌';
+      if (type === 'warning') icon = '⚠️';
+      
+      notification.innerHTML = `<span>${icon} ${message}</span>`;
       
       document.body.appendChild(notification);
       
@@ -385,11 +519,16 @@
       }, 3000);
     }
     
-    // 点击卡片显示提示
+    // 点击卡片打开链接
     document.querySelectorAll('.link-card').forEach(card => {
       card.addEventListener('click', function(e) {
-        const title = this.querySelector('.link-card__title').textContent;
-        showNotification(`正在打开「${title}」...`);
+        // 阻止按钮点击事件冒泡
+        if (e.target.classList.contains('copy-btn')) return;
+        
+        const url = this.getAttribute('data-url');
+        if (url) {
+          openLink(url);
+        }
       });
     });
   </script>
