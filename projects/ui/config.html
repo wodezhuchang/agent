@@ -100,6 +100,8 @@
       text-decoration: none;
       font-weight: 500;
       transition: all var(--transition);
+      border: none;
+      cursor: pointer;
     }
     
     .action-btn:hover {
@@ -253,6 +255,11 @@
       color: white;
     }
     
+    .notification--warning {
+      background: var(--warning);
+      color: white;
+    }
+    
     .notification--fadeout {
       animation: fadeOut 0.3s ease-out forwards;
     }
@@ -319,6 +326,11 @@
       color: var(--error);
     }
     
+    .status-badge--info {
+      background: var(--primary-bg);
+      color: var(--primary);
+    }
+    
     .progress-bar {
       height: 8px;
       background: var(--bg-tertiary);
@@ -332,6 +344,162 @@
       background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
       border-radius: 4px;
       transition: width var(--transition);
+    }
+    
+    /* 上传区域样式 */
+    .upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      text-align: center;
+      transition: all var(--transition);
+      background: var(--bg-tertiary);
+      cursor: pointer;
+    }
+    
+    .upload-area:hover {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+    }
+    
+    .upload-area.dragover {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+      transform: scale(1.02);
+    }
+    
+    .upload-area__icon {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .upload-area__text {
+      font-size: var(--text-base);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .upload-area__hint {
+      font-size: var(--text-sm);
+      color: var(--text-tertiary);
+    }
+    
+    /* 文件列表样式 */
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+    
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-md);
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      transition: all var(--transition);
+    }
+    
+    .file-item:hover {
+      background: var(--border);
+    }
+    
+    .file-item__info {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      flex: 1;
+    }
+    
+    .file-item__icon {
+      font-size: 1.5rem;
+    }
+    
+    .file-item__name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .file-item__size {
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+    }
+    
+    .file-item__delete {
+      padding: 4px 8px;
+      background: var(--error-bg);
+      color: var(--error);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: var(--text-xs);
+      transition: all var(--transition);
+    }
+    
+    .file-item__delete:hover {
+      background: var(--error);
+      color: white;
+    }
+    
+    /* 测试区域样式 */
+    .test-input-group {
+      display: flex;
+      gap: var(--spacing-md);
+    }
+    
+    @media (max-width: 768px) {
+      .test-input-group {
+        flex-direction: column;
+      }
+    }
+    
+    .test-results {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .test-results__placeholder {
+      text-align: center;
+      color: var(--text-tertiary);
+      padding: var(--spacing-xl);
+    }
+    
+    .test-results__item {
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    .test-results__item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .test-results__title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .test-results__content {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+      line-height: 1.7;
+    }
+    
+    .test-results__score {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--success-bg);
+      color: var(--success);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-xs);
+      margin-top: var(--spacing-sm);
     }
   </style>
 </head>
@@ -424,7 +592,7 @@
         <div class="config-card__header">
           <div class="config-card__icon" style="background: var(--success-bg); color: var(--success);">📚</div>
           <div>
-            <h3 class="config-card__title">知识库配置</h3>
+            <h3 class="config-card__title">知识库配置（Coze 平台）</h3>
             <span class="status-badge status-badge--warning">尚未配置</span>
           </div>
         </div>
@@ -449,6 +617,74 @@
             </a>
             <button class="action-btn action-btn--secondary" onclick="showKnowledgeHelp()">
               ❓ 详细步骤说明
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 本地知识库测试卡片 -->
+      <div class="config-card animate-fadeIn" style="animation-delay: 0.05s;">
+        <div class="config-card__header">
+          <div class="config-card__icon" style="background: var(--primary-bg); color: var(--primary);">📂</div>
+          <div>
+            <h3 class="config-card__title">本地知识库测试（备选方案）</h3>
+            <span class="status-badge status-badge--info">离线可用</span>
+          </div>
+        </div>
+        <div class="config-card__body">
+          <p>如果您还没有在 Coze 配置知识库，可以使用这个功能<strong>直接在页面中上传文件</strong>进行本地测试。</p>
+          
+          <!-- 文件上传区域 -->
+          <div class="upload-area" id="upload-area">
+            <input type="file" id="file-input" accept=".txt,.md,.json,.pdf,.doc,.docx" style="display: none;">
+            <div class="upload-area__icon">📤</div>
+            <div class="upload-area__text">
+              <strong>点击选择文件</strong> 或拖拽文件到这里
+            </div>
+            <div class="upload-area__hint">
+              支持格式：TXT、MD、JSON、PDF、Word（单个文件建议小于5MB）
+            </div>
+          </div>
+          
+          <!-- 已上传文件列表 -->
+          <div id="uploaded-files" class="uploaded-files" style="margin-top: var(--spacing-lg); display: none;">
+            <h4 style="font-size: var(--text-base); margin-bottom: var(--spacing-md); color: var(--text-primary);">
+              📋 已上传文件：
+            </h4>
+            <div id="file-list" class="file-list"></div>
+          </div>
+          
+          <!-- 本地测试区域 -->
+          <div class="test-area" style="margin-top: var(--spacing-xl);">
+            <h4 style="font-size: var(--text-base); margin-bottom: var(--spacing-md); color: var(--text-primary);">
+              🔍 本地知识库检索测试
+            </h4>
+            
+            <div class="test-input-group">
+              <input type="text" 
+                     id="test-query" 
+                     class="form-input" 
+                     placeholder="输入要查询的问题，例如：图书馆开放时间"
+                     style="flex: 1;">
+              <button class="action-btn" onclick="testLocalSearch()">
+                🔍 测试检索
+              </button>
+            </div>
+            
+            <div id="test-results" class="test-results" style="margin-top: var(--spacing-md);">
+              <div class="test-results__placeholder">
+                💡 测试结果将在此处显示...<br>
+                请先上传文件，然后输入问题进行检索测试
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top: var(--spacing-lg);">
+            <button class="action-btn action-btn--secondary" onclick="clearLocalKnowledge()">
+              🗑️ 清空本地知识库
+            </button>
+            <button class="action-btn action-btn--secondary" style="margin-left: var(--spacing-sm);" onclick="loadSampleKnowledge()">
+              📄 加载示例知识库
             </button>
           </div>
         </div>
@@ -519,7 +755,7 @@
             </div>
             
             <div class="form-group">
-              <button type="submit" class="btn btn--primary">💾 保存模型配置</button>
+              <button type="submit" class="action-btn">💾 保存模型配置</button>
             </div>
           </form>
         </div>
@@ -577,7 +813,7 @@
             </div>
             
             <div class="form-group" style="margin-top: var(--spacing-xl);">
-              <button type="submit" class="btn btn--primary">💾 保存功能配置</button>
+              <button type="submit" class="action-btn">💾 保存功能配置</button>
             </div>
           </form>
         </div>
@@ -669,8 +905,8 @@
         </div>
       </div>
       <div class="modal__footer">
-        <button class="btn btn--secondary" onclick="document.getElementById('knowledge-help-modal').style.display='none'">我知道了</button>
-        <a href="https://www.coze.cn" target="_blank" class="btn btn--primary">前往配置</a>
+        <button class="action-btn action-btn--secondary" onclick="document.getElementById('knowledge-help-modal').style.display='none'">我知道了</button>
+        <a href="https://www.coze.cn" target="_blank" class="action-btn">前往配置</a>
       </div>
     </div>
   </div>
@@ -680,6 +916,358 @@
   <script src="js/main.js"></script>
   
   <script>
+    // ==================== 本地知识库功能 ====================
+    
+    const KNOWLEDGE_STORAGE_KEY = 'local_knowledge_base';
+    let knowledgeBase = [];
+    
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      loadKnowledgeBase();
+      initUploadArea();
+      loadSavedConfig();
+    });
+    
+    // 加载知识库
+    function loadKnowledgeBase() {
+      const saved = localStorage.getItem(KNOWLEDGE_STORAGE_KEY);
+      if (saved) {
+        try {
+          knowledgeBase = JSON.parse(saved);
+          updateFileList();
+        } catch (error) {
+          console.error('Failed to load knowledge base:', error);
+          knowledgeBase = [];
+        }
+      }
+    }
+    
+    // 保存知识库
+    function saveKnowledgeBase() {
+      localStorage.setItem(KNOWLEDGE_STORAGE_KEY, JSON.stringify(knowledgeBase));
+      updateFileList();
+    }
+    
+    // 初始化上传区域
+    function initUploadArea() {
+      const uploadArea = document.getElementById('upload-area');
+      const fileInput = document.getElementById('file-input');
+      
+      // 点击上传
+      uploadArea.addEventListener('click', function() {
+        fileInput.click();
+      });
+      
+      // 文件选择
+      fileInput.addEventListener('change', function(e) {
+        handleFiles(e.target.files);
+      });
+      
+      // 拖拽上传
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+      
+      uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+      });
+      
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+      });
+    }
+    
+    // 处理文件
+    function handleFiles(files) {
+      if (!files || files.length === 0) return;
+      
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const content = e.target.result;
+          const fileData = {
+            id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+            name: file.name,
+            size: file.size,
+            type: file.type || 'text/plain',
+            content: content,
+            uploadTime: new Date().toLocaleString('zh-CN')
+          };
+          
+          knowledgeBase.push(fileData);
+          saveKnowledgeBase();
+          showNotification(`文件「${file.name}」上传成功！`, 'success');
+        };
+        
+        reader.onerror = function() {
+          showNotification(`文件「${file.name}」读取失败！`, 'error');
+        };
+        
+        if (file.type === 'application/json' || file.type === 'text/plain' || 
+            file.name.endsWith('.txt') || file.name.endsWith('.md') || 
+            file.name.endsWith('.json')) {
+          reader.readAsText(file);
+        } else {
+          // 对于 PDF、Word 等格式，读取为文本（简化处理）
+          reader.readAsText(file);
+        }
+      });
+    }
+    
+    // 更新文件列表
+    function updateFileList() {
+      const fileListContainer = document.getElementById('uploaded-files');
+      const fileList = document.getElementById('file-list');
+      
+      if (knowledgeBase.length === 0) {
+        fileListContainer.style.display = 'none';
+        return;
+      }
+      
+      fileListContainer.style.display = 'block';
+      
+      fileList.innerHTML = knowledgeBase.map(file => `
+        <div class="file-item">
+          <div class="file-item__info">
+            <div class="file-item__icon">${getFileIcon(file.type)}</div>
+            <div>
+              <div class="file-item__name">${file.name}</div>
+              <div class="file-item__size">${formatFileSize(file.size)} · ${file.uploadTime}</div>
+            </div>
+          </div>
+          <button class="file-item__delete" onclick="deleteFile('${file.id}')">删除</button>
+        </div>
+      `).join('');
+    }
+    
+    // 删除文件
+    function deleteFile(fileId) {
+      knowledgeBase = knowledgeBase.filter(file => file.id !== fileId);
+      saveKnowledgeBase();
+      showNotification('文件已删除', 'success');
+    }
+    
+    // 清空知识库
+    function clearLocalKnowledge() {
+      if (confirm('确定要清空本地知识库吗？此操作不可恢复。')) {
+        knowledgeBase = [];
+        saveKnowledgeBase();
+        document.getElementById('test-results').innerHTML = `
+          <div class="test-results__placeholder">
+            💡 测试结果将在此处显示...<br>
+            请先上传文件，然后输入问题进行检索测试
+          </div>
+        `;
+        showNotification('本地知识库已清空', 'success');
+      }
+    }
+    
+    // 加载示例知识库
+    function loadSampleKnowledge() {
+      const sampleData = [
+        {
+          id: 'sample_1',
+          name: '校园通知.txt',
+          size: 1024,
+          type: 'text/plain',
+          content: `校园通知：
+          
+1. 图书馆开放时间：周一至周五 8:00-22:00，周末 9:00-21:00
+2. 食堂作息：早餐 7:00-9:00，午餐 11:00-13:00，晚餐 17:00-19:00
+3. 选课时间：2024年春季学期选课时间为2月15日-2月20日
+4. 考试安排：期末考试时间为6月15日-6月25日
+5. 暑假时间：7月1日-8月31日
+6. 校园网服务电话：010-12345678
+7. 教务处办公地点：行政楼201室
+8. 学生证补办：携带身份证到教务处办理，费用20元
+9. 奖学金评定：每学期进行一次，成绩排名前10%可申请
+10. 入党流程：提交入党申请书→参加党校培训→成为积极分子→发展为预备党员→转正`,
+          uploadTime: new Date().toLocaleString('zh-CN')
+        },
+        {
+          id: 'sample_2',
+          name: '校规校纪.md',
+          size: 2048,
+          type: 'text/markdown',
+          content: `# 校规校纪
+
+## 一、日常行为规范
+1. 按时上课，不迟到、不早退、不旷课
+2. 上课时认真听讲，积极参与课堂互动
+3. 遵守考试纪律，诚信考试
+4. 爱护公物，保护校园环境
+5. 尊敬师长，团结同学
+
+## 二、宿舍管理规定
+1. 晚上23:00前必须返回宿舍
+2. 宿舍内禁止使用大功率电器
+3. 保持宿舍卫生整洁
+4. 禁止在宿舍内吸烟、饮酒
+5. 来访人员需登记
+
+## 三、请假制度
+1. 病假：需提供医院证明
+2. 事假：需提前申请，说明原因
+3. 请假3天以内由辅导员批准
+4. 请假3天以上需教务处批准
+
+## 四、违规处理
+1. 迟到早退：累计3次记旷课1次
+2. 旷课10学时以上给予警告处分
+3. 考试作弊：成绩记零分，视情节严重程度给予处分
+4. 打架斗殴：视情节给予严重警告至开除学籍处分
+5. 抄袭作业：成绩记零分`,
+          uploadTime: new Date().toLocaleString('zh-CN')
+        }
+      ];
+      
+      knowledgeBase = [...sampleData];
+      saveKnowledgeBase();
+      showNotification('示例知识库已加载！包含校园通知和校规校纪', 'success');
+    }
+    
+    // 测试本地检索
+    function testLocalSearch() {
+      const query = document.getElementById('test-query').value.trim();
+      
+      if (!query) {
+        showNotification('请输入要查询的问题！', 'warning');
+        return;
+      }
+      
+      if (knowledgeBase.length === 0) {
+        showNotification('请先上传文件到本地知识库！', 'warning');
+        return;
+      }
+      
+      // 简单的关键词匹配检索（模拟知识库检索）
+      const results = searchKnowledge(query);
+      displayResults(query, results);
+    }
+    
+    // 知识库检索
+    function searchKnowledge(query) {
+      const keywords = query.toLowerCase().split(/\s+/);
+      const results = [];
+      
+      knowledgeBase.forEach(doc => {
+        const content = doc.content.toLowerCase();
+        let score = 0;
+        let matchedKeywords = [];
+        
+        keywords.forEach(keyword => {
+          if (content.includes(keyword)) {
+            score += 1;
+            matchedKeywords.push(keyword);
+          }
+        });
+        
+        // 计算相关性得分
+        const relevanceScore = score / keywords.length;
+        
+        if (relevanceScore > 0) {
+          // 提取相关片段
+          const snippet = extractSnippet(doc.content, keywords);
+          
+          results.push({
+            document: doc,
+            score: relevanceScore,
+            matchedKeywords: matchedKeywords,
+            snippet: snippet
+          });
+        }
+      });
+      
+      // 按得分排序
+      results.sort((a, b) => b.score - a.score);
+      
+      return results;
+    }
+    
+    // 提取相关片段
+    function extractSnippet(content, keywords) {
+      const lines = content.split('\n');
+      let bestLine = '';
+      let maxMatches = 0;
+      
+      lines.forEach(line => {
+        const lineLower = line.toLowerCase();
+        let matches = 0;
+        
+        keywords.forEach(keyword => {
+          if (lineLower.includes(keyword)) {
+            matches++;
+          }
+        });
+        
+        if (matches > maxMatches) {
+          maxMatches = matches;
+          bestLine = line.trim();
+        }
+      });
+      
+      return bestLine || content.substring(0, 200) + '...';
+    }
+    
+    // 显示检索结果
+    function displayResults(query, results) {
+      const resultsContainer = document.getElementById('test-results');
+      
+      if (results.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="test-results__placeholder">
+            😕 未找到相关结果<br>
+            尝试使用其他关键词，或上传更多文档到知识库
+          </div>
+        `;
+        return;
+      }
+      
+      resultsContainer.innerHTML = `
+        <div style="margin-bottom: var(--spacing-md); color: var(--text-secondary); font-size: var(--text-sm);">
+          找到 ${results.length} 个相关结果：
+        </div>
+        ${results.slice(0, 5).map((result, index) => `
+          <div class="test-results__item">
+            <div class="test-results__title">
+              ${result.document.name}
+              <span class="test-results__score">相关度：${Math.round(result.score * 100)}%</span>
+            </div>
+            <div class="test-results__content">
+              ${result.snippet}
+            </div>
+          </div>
+        `).join('')}
+        ${results.length > 5 ? `
+          <div style="text-align: center; color: var(--text-tertiary); font-size: var(--text-sm); margin-top: var(--spacing-md);">
+            还有 ${results.length - 5} 个结果...
+          </div>
+        ` : ''}
+      `;
+    }
+    
+    // 工具函数
+    function getFileIcon(type) {
+      if (type.includes('pdf')) return '📄';
+      if (type.includes('word') || type.includes('document')) return '📝';
+      if (type.includes('json')) return '📋';
+      if (type.includes('markdown') || type.includes('md')) return '📑';
+      return '📃';
+    }
+    
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+    
+    // ==================== 其他功能 ====================
+    
     // 显示知识库帮助
     window.showKnowledgeHelp = function() {
       document.getElementById('knowledge-help-modal').style.display = 'flex';
@@ -723,9 +1311,7 @@
       
       const notification = document.createElement('div');
       notification.className = `notification notification--${type}`;
-      notification.innerHTML = `
-        <span>${message}</span>
-      `;
+      notification.innerHTML = `<span>${message}</span>`;
       
       document.body.appendChild(notification);
       
@@ -821,9 +1407,6 @@
       };
       input.click();
     };
-    
-    // 页面加载时恢复配置
-    document.addEventListener('DOMContentLoaded', loadSavedConfig);
     
     // 关闭弹窗点击外部
     document.querySelector('.modal').addEventListener('click', function(e) {

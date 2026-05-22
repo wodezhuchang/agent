@@ -1,0 +1,8 @@
+{
+  "knowledge_base_id": "",
+  "knowledge_base_name": "校园校小助知识库",
+  "top_k": 3,
+  "min_score": 0.5,
+  "enabled": true,
+  "description": "校园校小助知识库配置，用于存储校园通知、校规校纪、办事指南等"
+}
